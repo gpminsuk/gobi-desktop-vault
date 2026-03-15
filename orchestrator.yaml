@@ -1,4 +1,4 @@
-version: "0.0.20"
+version: 0.0.20
 orchestrator:
   prompts_dir: _Settings_/Prompts
   tasks_dir: _Settings_/Tasks
@@ -17,6 +17,8 @@ orchestrator:
     - .doc
     - .txt
     - .epub
+  captures_dir: _Settings_/History/Capture
+  capture_prompt_path: _Settings_/Prompts/Ambient Canvas Brainstorming (ACB).md
 defaults:
   executor: claude_code
   timeout_minutes: 30
