@@ -83,8 +83,9 @@ WebFetch → Playwright (headless) → 사용자에게 텍스트 붙여넣기 �
 ```
 
 ### LinkedIn
-- **WebFetch first**: `WebFetch(url)` — 공개 프로필이면 작동
-- **Auth-wall 대응**: LinkedIn은 미인증 접근을 자주 차단. 차단 시: 사용자에게 "About" 섹션 붙여넣기 또는 PDF 내보내기(LinkedIn Settings > Data Privacy > Get a copy) 요청
+- **⚠️ 크롤링 제한 주의**: LinkedIn은 미인증 접근을 높은 확률로 차단함. **온보딩 흐름에서는 LinkedIn URL을 적극 요청하지 않는다.** 사용자가 직접 제공한 경우에만 시도하고, 실패 시 빠르게 스킵한다.
+- **WebFetch first**: `WebFetch(url)` — 공개 프로필이면 작동하나 차단률 높음
+- **Auth-wall 대응**: 차단 시: 사용자에게 "About" 섹션 붙여넣기 또는 PDF 내보내기(LinkedIn Settings > Data Privacy > Get a copy) 요청
 - **추출 대상**: 이름, 헤드라인, 요약/소개, 경력 목록, 학력, 스킬, 추천 게시물
 
 ### X (Twitter)
