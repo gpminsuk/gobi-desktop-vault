@@ -2,10 +2,10 @@
 name: gobi-onboarding
 description: 고비 데스크탑 3.0 대화형 음성 온보딩 가이드
 metadata:
-  version: 3.8
+  version: 3.9
   author: lifidea
   created: 2026-02-04
-  updated: 2026-03-14
+  updated: 2026-03-15
 ---
 
 ## When to Use
@@ -241,30 +241,32 @@ metadata:
 - 너무 넓은 경우 (예: "IT"): "IT 쪽이시군요! 좀 더 구체적으로 어떤 분야인지 알려주실 수 있어요? 예를 들어 개발, 데이터, 보안 같은 게 있을 수 있어요."
 - 지역/나이 정보가 없는 경우: "혹시 어디에서 활동하시는지도 알려주실 수 있어요? 시간대나 지역에 맞는 콘텐츠를 추천해드릴 수 있어요."
 
-### 2-2. Brain Bootstrap (BBT) - 프로필 심화
+### 2-2. Brain Bootstrap - 프로필 심화 (BBF → BBG)
 
-이름과 직업/역할 정보를 확보한 후, BBT 프롬프트(`_Settings_/Skills/gobi-onboarding/Brain Bootstrap (BBT).md`)를 활용하여 프로필을 심화한다.
+이름과 직업/역할 정보를 확보한 후, BBF(`_Settings_/Skills/gobi-onboarding/Brain Bootstrap Fetch (BBF).md`)로 프로필 데이터를 수집하고, BBG(`_Settings_/Skills/gobi-onboarding/Brain Bootstrap Game (BBG).md`)로 심화/검증한다.
 
 > 프로필을 더 풍성하게 만들 수 있어요.
 > 이력서나 링크드인, 개인 홈페이지 같은 게 있으세요?
 
 #### Scenario A: 소스 제공됨 (이력서, URL 등)
 - 사용자가 이력서 파일, LinkedIn URL, 개인 웹사이트 등을 제공
-- **BBT Phase 1-4 실행**: 소스 수집 → 프로필 추출 → 병합/중복 제거 → BRAIN.md + BRAIN_PROFILE.md 생성
+- **BBF Phase 1-4 실행**: 소스 수집 → 프로필 추출 → 병합/중복 제거 → BRAIN.md + BRAIN_PROFILE.md 생성
 - 에이전트: "좋아요! 지금 프로필 정보를 가져오고 있어요. 잠시만 기다려주세요."
 - (모든 소스를 병렬로 fetch)
 - **`BRAIN.md` 업데이트**: 추출된 프로필 정보를 BRAIN.md에 반영, frontmatter에 `profile: "[[BRAIN_PROFILE.md]]"` 추가
 - **`BRAIN_PROFILE.md` 생성**: 상세 구조화 프로필 (로컬 전용)
-- 에이전트 (`obsidian_enabled = true`): `obsidian open file="BRAIN.md"` 실행 후 "프로필이 만들어졌어요! 방금 옵시디언에서 열어드렸어요. 수정할 부분이 있으면 말씀해주세요."
-- 에이전트 (`obsidian_enabled = false`): "프로필이 만들어졌어요! 화면에서 확인해보세요. 수정할 부분이 있으면 말씀해주세요."
+- 에이전트 (`obsidian_enabled = true`): `obsidian open file="BRAIN.md"` 실행 후 "프로필이 만들어졌어요! 방금 옵시디언에서 열어드렸어요."
+- **이어서 BBG 실행**: "프로필 기본 정보를 가져왔어요! 이제 재미있는 게임으로 좀 더 알아볼게요."
+  - BBG에 BBF 결과를 컨텍스트로 전달 (BBF Results 섹션)
+  - BBG는 이미 아는 정보를 건너뛰고 심화 질문에 집중
+  - BBF가 커버한 차원은 초기 커버로 인정 → 질문 수 감소
 
-#### Scenario B: 소스 없음 (기존 웹 검색 폴백)
+#### Scenario B: 소스 없음 (웹 검색 + BBG)
 - 사용자: "없어요" / "나중에요"
-- 기존 웹 검색 로직으로 폴백:
-  - 백그라운드에서 이름 + 직업 키워드로 웹 검색 수행
-  - 검색 결과가 있으면: "혹시 이 [홈페이지/블로그]가 맞으세요?"
-  - 검색 결과가 없으면: 앞에서 알려준 정보로 프로필 초안 생성
-- **`BRAIN.md` 업데이트**: 사용자가 알려준 정보(이름, 직업, 관심사 등)를 `BRAIN.md`에 반영
+- 백그라운드에서 이름 + 직업 키워드로 웹 검색 수행
+- 웹 검색 결과를 BBG에 시드로 전달
+- **BBG 바로 실행**: 웹 검색 결과를 컨텍스트로 활용하여 게임 시작
+- 검색 결과가 있으면 BBG가 자연스럽게 활용, 없으면 오픈엔드 질문부터 시작
 
 #### Scenario C: 나중에 실행
 - 사용자: "나중에 할게요"
@@ -622,7 +624,7 @@ BRAIN.md 업데이트 직후 반드시 제안한다. 건너뛰어도 되지만, 
 
 ### 5-0. Brain Network Discovery
 
-2단계에서 수집한 interest/skill 데이터를 활용하여 BBT Phase 5를 실행한다.
+2단계에서 수집한 interest/skill 데이터를 활용하여 BBF Phase 5를 실행한다.
 
 > 프로필을 바탕으로 비슷한 관심사의 브레인을 찾아봤어요.
 
@@ -981,6 +983,7 @@ EIC/EDM 등 파이프라인이 처리 시간이 길어질 때 (5분 이상) 자�
 | v3.6 | 2026-03-13 | 3-6 음성 캔버스(Capture Tab) 추가, 5-3 Welcome 쓰레드 인사(댓글/새 글) 교체, 5-2 PBU 참조 파일 syncfiles 동기화 명시 |
 | v3.7 | 2026-03-14 | 2-2 BBT(Brain Bootstrap) 통합: 이력서/LinkedIn/웹사이트 기반 프로필 심화, 5-0 Brain Network Discovery 추가 |
 | v3.8 | 2026-03-14 | 3-1 에이전트 주도 콘텐츠 수집(시나리오 I), 3-4 시드 토픽 즉시 생성, 5-1 에이전트 직접 스페이스 선택(warp 제거), 5-2 미디어 포함 및 쓰레드 연동 제안, 5-3 미디어 임베드, 진행 표시 형식 표준화 |
+| v3.9 | 2026-03-15 | 2-2 BBF→BBG 통합: BBG 질문 유형 5-팔레트(P0), 유도 질문 방지(P0), 동적 질문 수 6-12(P0), 제네릭 라벨 금지(P0), 적응형 3단계 흐름(P1), BBF 결과 활용 규칙 |
 
 ### 학습 이력
 
