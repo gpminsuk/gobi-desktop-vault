@@ -1,0 +1,32 @@
+{
+	"nodes":[
+		{"id":"title","type":"text","x":-100,"y":-300,"width":500,"height":80,"text":"# Vault Evolution & Migration\nai4pkm-vault template v1.0 → v0.0.26"},
+		{"id":"v1_0","type":"text","x":-540,"y":-160,"width":400,"height":180,"color":"1","text":"## v1.0 — Initial Template\n**2026-01-05**\n\n- EIC node (single agent)\n- 10 base prompts (EIC, GWR, DIR, RVA, ARP, IWA, ...)\n- STT/TTS/wakeword settings\n- `.claude/skills` subtree\n- Basic folder structure"},
+		{"id":"v0_0_13","type":"text","x":-540,"y":80,"width":400,"height":220,"color":"4","text":"## v0.0.13 — Gobi 3.0\n**2026-03-03**\n\n- `.gobi/` directory + settings.yaml\n- BRAIN.md, BRAIN_PROMPT.md, VAULTS.md\n- EDM, GDR, TIU, ACB nodes\n- New prompts: DDO, ICB, DRB, EDM, ACB\n- Removed: PBC, CTP, STT/TTS settings\n- Skills → `_Settings_/Skills/`\n- gobi-cli, gobi-onboarding skills\n- `.claude/skills` symlink"},
+		{"id":"v0_0_20","type":"text","x":-540,"y":360,"width":400,"height":200,"color":"6","text":"## v0.0.20 — Capture Infra\n**2026-03-13**\n\n- `captures_dir` + `capture_prompt_path`\n- PBU prompt (Post Brain Update)\n- New bases: Participants, Publish, Skills\n- `_Outbox_/BrainUpdates/`\n- AGENTS.md expansion (Skills, Search)\n- ai4pkm-cli vault-update module\n- `_Settings_/History/Capture/`"},
+		{"id":"v0_0_26","type":"text","x":-540,"y":620,"width":400,"height":180,"color":"5","text":"## v0.0.26 — Polish\n**2026-03-18**\n\n- AGENTS.md Gobi Space Features section\n- CLAUDE.md → references AGENTS.md\n- Onboarding v3.13 (space selection, DRB/GDR)\n- Version field in orchestrator.yaml\n- `id` / `name` root fields"},
+		{"id":"epoch1","type":"text","x":400,"y":-40,"width":380,"height":200,"color":"1","text":"## Epoch 1: Foundation\nv1.0 → v0.0.13\n\n1. Remove STT/TTS/wakeword fields\n2. Add directory config fields\n3. Add EDM/GDR/TIU/ACB nodes\n4. Create `.gobi/`, BRAIN.md, VAULTS.md\n5. Create folders (History, Documents, Canvas)\n6. Add DDO/ICB/DRB/EDM/ACB prompts\n7. Remove PBC/CTP prompts"},
+		{"id":"epoch2","type":"text","x":400,"y":220,"width":380,"height":180,"color":"6","text":"## Epoch 2: Capture\nv0.0.13 → v0.0.20\n\n1. Add captures_dir config\n2. Create Capture folder\n3. Add PBU prompt\n4. Add Participants/Publish/Skills bases\n5. Create BrainUpdates outbox\n6. Expand AGENTS.md sections"},
+		{"id":"epoch3","type":"text","x":400,"y":460,"width":380,"height":160,"color":"5","text":"## Epoch 3: Polish\nv0.0.20 → v0.0.26\n\n1. Add AGENTS.md Gobi sections\n2. Update CLAUDE.md references\n3. Update onboarding skill\n4. Set version to 0.0.26\n5. Add id/name fields"},
+		{"id":"step1","type":"text","x":400,"y":-240,"width":380,"height":140,"color":"3","text":"## Migration Flow\n\n**Step 1**: Detect version (orchestrator.yaml)\n**Step 2**: Select epochs to apply\n**Step 3**: Show plan (✅ done / ⬜ TODO)\n**Step 4**: Execute with backups\n**Step 5**: Verify checklist"},
+		{"id":"verify","type":"text","x":400,"y":680,"width":380,"height":120,"color":"3","text":"## Verification\n\n- Structure: .gobi/, BRAIN.md, VAULTS.md\n- Folders: History, Capture, Documents, Canvas\n- Orchestrator: all fields, nodes, version\n- Prompts & Bases: complete set\n- Track in `.gobi/migrations.yaml`"},
+		{"id":"community_check","type":"text","x":400,"y":860,"width":380,"height":160,"color":"2","text":"## Community Onboarding Check\n\nAfter verification, assess BRAIN.md:\n- **No BRAIN.md** → gobi-onboarding (full)\n- **Template/placeholder** → gobi-onboarding Step 4\n- **Rich BRAIN.md** → brain enrichment\n  (publish, post-update, review)"},
+		{"id":"route_onboarding","type":"text","x":100,"y":1080,"width":300,"height":80,"color":"1","text":"## Route: gobi-onboarding\nFull onboarding or Step 4 only"},
+		{"id":"route_enrichment","type":"text","x":500,"y":1080,"width":300,"height":80,"color":"5","text":"## Route: Brain Enrichment\ngobi brain publish / post-update"}
+	],
+	"edges":[
+		{"id":"e_v1_v13","fromNode":"v1_0","fromSide":"bottom","toNode":"v0_0_13","toSide":"top"},
+		{"id":"e_v13_v20","fromNode":"v0_0_13","fromSide":"bottom","toNode":"v0_0_20","toSide":"top"},
+		{"id":"e_v20_v26","fromNode":"v0_0_20","fromSide":"bottom","toNode":"v0_0_26","toSide":"top"},
+		{"id":"e_v1_epoch1","fromNode":"v1_0","fromSide":"right","toNode":"epoch1","toSide":"left","label":"triggers"},
+		{"id":"e_v13_epoch2","fromNode":"v0_0_13","fromSide":"right","toNode":"epoch2","toSide":"left","label":"triggers"},
+		{"id":"e_v20_epoch3","fromNode":"v0_0_20","fromSide":"right","toNode":"epoch3","toSide":"left","label":"triggers"},
+		{"id":"e_step1_epoch1","fromNode":"step1","fromSide":"bottom","toNode":"epoch1","toSide":"top"},
+		{"id":"e_epoch1_epoch2","fromNode":"epoch1","fromSide":"bottom","toNode":"epoch2","toSide":"top"},
+		{"id":"e_epoch2_epoch3","fromNode":"epoch2","fromSide":"bottom","toNode":"epoch3","toSide":"top"},
+		{"id":"e_epoch3_verify","fromNode":"epoch3","fromSide":"bottom","toNode":"verify","toSide":"top"},
+		{"id":"e_verify_community","fromNode":"verify","fromSide":"bottom","toNode":"community_check","toSide":"top"},
+		{"id":"e_community_onboarding","fromNode":"community_check","fromSide":"bottom","toNode":"route_onboarding","toSide":"top","label":"No/template BRAIN.md"},
+		{"id":"e_community_enrichment","fromNode":"community_check","fromSide":"bottom","toNode":"route_enrichment","toSide":"top","label":"Rich BRAIN.md"}
+	]
+}
