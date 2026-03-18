@@ -8,7 +8,7 @@ metadata:
   version: 1.1.0
   author: lifidea
   created: 2026-03-18
-  target_version: 0.0.27
+  target_version: 0.0.28
 ---
 
 # Gobi Migration Skill
