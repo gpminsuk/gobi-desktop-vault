@@ -61,6 +61,9 @@ updated: 2026-02-24
    - 박스 높이 850px 이하 (한눈에 보이도록)
    - 카테고리 내 2열 레이아웃 기본 적용
    - 관련 노드 간 가로 연결로 높이 줄이기
+   - 카테고리 컨테이너는 group 타입 사용 (text 타입 금지)
+     → group 노드는 label 속성으로 카테고리명 표시 (겹침 없음)
+     → text 타입 컨테이너는 내부 노드와 텍스트가 겹쳐 보임
 
 2. EXACT NODE POSITIONING (2025-12-31 기준)
 
@@ -116,7 +119,7 @@ updated: 2026-02-24
 
 2. NODE TYPES
    - source-file: file 타입, 원본 앰비언트모드 노트 참조
-   - cat-*: text 타입, 카테고리 컨테이너 박스
+   - cat-*: group 타입, 카테고리 컨테이너 (label 속성으로 카테고리명 표시)
    - topic-*: text 타입, 개별 주제 노드
    - insight-*: text 타입, 통찰/결론 노드
    - action-*: text 타입, 액션 아이템 노드
@@ -269,6 +272,18 @@ updated: 2026-02-24
   "x": -710, "y": 10,
   "width": 230, "height": 100,
   "color": "4"
+}
+```
+
+### 카테고리 컨테이너 노드 (group 타입)
+```json
+{
+  "id": "cat-relationships",
+  "type": "group",
+  "label": "💑 관계",
+  "x": -750, "y": -400,
+  "width": 530, "height": 850,
+  "color": "2"
 }
 ```
 

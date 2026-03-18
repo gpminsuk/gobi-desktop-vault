@@ -77,7 +77,7 @@ Use these 5 question types, alternating to keep the conversation dynamic:
 - **"3 Words for Me"**: Ask the user to describe themselves in 3 words as a profile seed
 - **Profile Preview Reaction**: In Phase 3, present 2-3 profile description variants and let the user pick their favorite
 
-## Dynamic Question Count (6-12)
+## Dynamic Question Count (4-8)
 
 Instead of a fixed number, use a **6-dimensional coverage model** to determine when to stop:
 
@@ -91,9 +91,9 @@ Instead of a fixed number, use a **6-dimensional coverage model** to determine w
 | Unique Story | 1+ personal episode captured |
 
 **Termination rules**:
-- All 6 dimensions covered → end immediately (minimum 6 questions)
-- Reached 10 questions → infer remaining uncovered dimensions from context, then end
-- Absolute maximum: 12 questions (hard stop)
+- All 6 dimensions covered → end immediately (minimum 4 questions)
+- Reached 7 questions → infer remaining uncovered dimensions from context, then end
+- Absolute maximum: 8 questions (hard stop)
 - If BBF pre-covered some dimensions, those count from the start → fewer questions needed
 
 **Question numbering**: Show progress as `Question 3 💭` (no "/10" — since total is dynamic).
