@@ -1,19 +1,22 @@
 ---
 name: gobi-migration
 description: >-
-  Migrate existing AI4PKM vaults to the latest template version.
-  Detects current version, generates a migration plan, and applies
-  incremental structural changes across three epochs.
+  Set up a new AI4PKM vault from scratch or migrate an existing vault
+  to the latest template version. Detects current state, generates a
+  plan, and applies changes with full backup safety.
 metadata:
-  version: 1.0.0
+  version: 1.1.0
   author: lifidea
   created: 2026-03-18
-  target_version: 0.0.26
+  target_version: 0.0.27
 ---
 
 # Gobi Migration Skill
 
-Migrate an existing AI4PKM vault from any prior template version to v0.0.26. The skill detects the current version, identifies which structural epochs are needed, and applies changes incrementally with full backup safety.
+Set up a new AI4PKM vault from scratch **or** migrate an existing vault to v0.0.27. The skill operates in two modes:
+
+- **Fresh Install**: For new users — scaffolds the full vault structure, fetches all template files from GitHub, and runs onboarding
+- **Upgrade**: For existing users — detects the current version, identifies which structural epochs are needed, and applies changes incrementally with full backup safety
 
 ## Prerequisites
 
@@ -33,11 +36,15 @@ Migrate an existing AI4PKM vault from any prior template version to v0.0.26. The
 - User asks to upgrade an older vault to the latest template
 - User cloned the template long ago and wants new Gobi features
 - After `vault-update` (file-level) when structural changes are also needed
+- User says "볼트 설정", "vault setup", or "set up vault"
+- User says "새 볼트", "new vault", or "fresh install"
+- User is in an empty directory and asks for help setting up a PKM vault
 
 ## Quick Commands
 
 ```markdown
-"마이그레이션" / "migrate" → Full migration flow
+"볼트 설정" / "setup vault" → Fresh install flow
+"마이그레이션" / "migrate" → Upgrade flow (existing)
 "마이그레이션 상태" / "migration status" → Detect version and show what's needed
 "마이그레이션 검증" / "verify migration" → Run verification checklist
 ```
@@ -60,18 +67,20 @@ When the migration needs a template file (prompt, base, config), fetch it from t
 
 ```bash
 # Fetch a single file's content (decoded from base64)
-gh api repos/jykim/ai4pkm-vault/contents/{path}?ref=main -q '.content' | base64 -d
+gh api "repos/jykim/ai4pkm-vault/contents/{path}?ref=main" -q '.content' | base64 -d
 
 # Examples:
-gh api repos/jykim/ai4pkm-vault/contents/orchestrator.yaml?ref=main -q '.content' | base64 -d
-gh api repos/jykim/ai4pkm-vault/contents/AGENTS.md?ref=main -q '.content' | base64 -d
-gh api repos/jykim/ai4pkm-vault/contents/BRAIN.md?ref=main -q '.content' | base64 -d
-gh api repos/jykim/ai4pkm-vault/contents/_Settings_/Prompts/Post%20Brain%20Update%20(PBU).md?ref=main -q '.content' | base64 -d
+gh api "repos/jykim/ai4pkm-vault/contents/orchestrator.yaml?ref=main" -q '.content' | base64 -d
+gh api "repos/jykim/ai4pkm-vault/contents/AGENTS.md?ref=main" -q '.content' | base64 -d
+gh api "repos/jykim/ai4pkm-vault/contents/BRAIN.md?ref=main" -q '.content' | base64 -d
+gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Prompts/Post%20Brain%20Update%20(PBU).md?ref=main" -q '.content' | base64 -d
 
 # List directory contents
-gh api repos/jykim/ai4pkm-vault/contents/_Settings_/Prompts?ref=main -q '.[].name'
-gh api repos/jykim/ai4pkm-vault/contents/_Settings_/Bases?ref=main -q '.[].name'
+gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Prompts?ref=main" -q '.[].name'
+gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Bases?ref=main" -q '.[].name'
 ```
+
+**Important**: Always wrap `gh api` URLs in double quotes. URLs containing `?ref=main` will cause shell glob expansion errors if unquoted, potentially resulting in empty responses and 0-byte files.
 
 **Always fetch from `main` branch** to get the latest template state. URL-encode spaces as `%20` in paths.
 
@@ -79,15 +88,43 @@ gh api repos/jykim/ai4pkm-vault/contents/_Settings_/Bases?ref=main -q '.[].name'
 
 ## Migration Flow
 
-### Step 1: Detect Version
+### Step 0: Vault Root Detection
 
-Read `orchestrator.yaml` and determine the vault's current version.
+Before anything else, confirm we're operating in the correct directory.
+
+**Detection logic**:
+
+1. Check CWD for `orchestrator.yaml` or `.obsidian/`
+2. If not found, walk parent directories (max 5 levels) looking for the same markers
+3. Interpret results:
+
+| Found | Where | Interpretation |
+|-------|-------|---------------|
+| `orchestrator.yaml` | CWD | Confirmed vault root — proceed |
+| `orchestrator.yaml` | Parent dir | Ask user to confirm path before proceeding |
+| `.obsidian/` only | CWD or parent | Existing Obsidian vault without AI4PKM — likely fresh install candidate |
+| Nothing | Anywhere | Empty/new directory — fresh install candidate |
+
+4. If ambiguous, ask user to confirm the vault root path
+5. **Warning**: If CWD is inside the `jykim/ai4pkm-vault` template repo itself (check for `.git/` remote pointing to `jykim/ai4pkm-vault`), warn the user — they probably want to operate in their own vault, not the template
+
+### Step 1: Mode Detection
+
+After confirming the vault root, determine which flow to use.
+
+**Decision tree**:
+
+- **Fresh Install**: No `orchestrator.yaml` AND no `_Settings_/` folder → run Fresh Install Flow
+- **Upgrade**: `orchestrator.yaml` exists, version < `0.0.27` → run existing epoch-based migration
+- **Up-to-date**: `orchestrator.yaml` exists, version == `0.0.27` → verify only, suggest `vault-update` for latest file content
+
+**For Upgrade mode**, read `orchestrator.yaml` to determine the vault's current version.
 
 **Primary signal**: `version` field
 - `"1.0"` → original template (pre-epoch 1)
 - `"0.0.13"` through `"0.0.19"` → epoch 1 done, needs epoch 2+
 - `"0.0.20"` through `"0.0.25"` → epochs 1-2 done, needs epoch 3
-- `"0.0.26"` → fully up to date
+- `"0.0.26"` or `"0.0.27"` → fully up to date
 
 **Fallback signals** (if `version` is missing or `"1.0"`):
 
@@ -103,28 +140,214 @@ Read `orchestrator.yaml` and determine the vault's current version.
 | Prompts: PBU exists | Epoch 2 complete |
 | Bases: Participants, Publish, Skills exist | Epoch 2 complete |
 
-### Step 2: Generate Migration Plan
+### Step 2: Backup (Conditional)
 
-Based on detected version, determine which epochs apply. For each epoch, check every step's precondition and mark:
+**Fresh Install**: Skip backup — nothing to back up. Offer `git init` if the user wants version control from the start (this happens at the end of the fresh install flow).
+
+**Upgrade**: This step is mandatory — migration must not proceed without user confirming their backup choice.
+
+Present the following to the user:
+
+```
+마이그레이션을 시작하기 전에 백업을 권장합니다. 어떤 방식을 선호하시나요?
+1. Git 리포지토리 초기화 (git init + initial commit) — 변경 이력 추적 가능
+2. 압축 파일로 백업 (zip) — 간단한 스냅샷
+3. 이미 백업했으므로 건너뛰기
+```
+
+**Action by choice**:
+
+1. **Git backup**:
+   - If `.git/` already exists → create a pre-migration commit: `git add -A && git commit -m "Pre-migration backup"`
+   - If no `.git/` → `git init && git add -A && git commit -m "Initial commit (pre-migration backup)"`
+
+2. **Zip backup**:
+   - Create `{vault_name}_backup_{timestamp}.zip` in the **parent directory** of the vault
+   ```bash
+   cd .. && zip -r "{vault_name}_backup_$(date +%Y%m%d_%H%M%S).zip" "{vault_name}/" && cd "{vault_name}"
+   ```
+
+3. **Skip** — user confirms they already have a backup
+
+### Step 3: Generate Plan & Confirm
+
+**Fresh Install**: Show a summary of what will be created (directories, config files, prompts, skills) and ask for confirmation.
+
+**Upgrade**: Based on detected version, determine which epochs apply. For each epoch, check every step's precondition and mark:
 - ✅ Already done (precondition met)
 - ⬜ TODO (needs to be applied)
 
-Present the plan to the user.
-
-### Step 3: User Confirms
-
-Show the plan summary and ask for confirmation before applying any changes. User can:
+Present the plan to the user. User can:
 - Approve all
-- Select specific epochs
+- Select specific epochs (upgrade only)
 - Skip individual steps
 
-### Step 4: Execute Migration
+### Step 4: Execute
 
-Apply changes epoch by epoch, step by step. Back up any modified files. Track progress in `.gobi/migrations.yaml`.
+**Fresh Install** → run the Fresh Install Flow (see below)
+
+**Upgrade** → apply changes epoch by epoch, step by step. Back up any modified files. Track progress in `.gobi/migrations.yaml`.
 
 ### Step 5: Verify
 
 Run the verification checklist to confirm everything is correct.
+
+### Step 6: Auto-invoke gobi-onboarding
+
+After verification completes, automatically hand off to gobi-onboarding.
+
+**Fresh install** → always full onboarding (BRAIN.md is a placeholder template):
+```
+마이그레이션이 완료됐어요! 이제 온보딩을 시작할게요.
+```
+→ Read `_Settings_/Skills/gobi-onboarding/SKILL.md` and begin full onboarding flow
+
+**Upgrade** → route based on BRAIN.md state:
+
+```
+1. Check if BRAIN.md exists
+   ├── No → "BRAIN.md가 없어요. 온보딩을 통해 프로필을 만들어볼까요?"
+   │        → Read gobi-onboarding SKILL.md, invoke full flow
+   └── Yes → Read BRAIN.md content
+             ├── Template/placeholder (<100 words real content)
+             │   → "마이그레이션이 완료됐어요! 프로필이 아직 기본 템플릿이에요. 온보딩을 시작할게요."
+             │   → Read gobi-onboarding SKILL.md, invoke Step 4 (Community Onboarding)
+             └── Rich content (>100 words, personalized)
+                 → "마이그레이션이 완료됐어요! 프로필이 잘 갖춰져 있어요. 커뮤니티에 공유해볼까요?"
+                 → Suggest: gobi brain publish, gobi brain post-update
+```
+
+---
+
+## Fresh Install Flow
+
+*Creates a complete AI4PKM vault from scratch using the latest template files from GitHub.*
+
+### FI-1: Scaffold Directories
+
+Create the full directory structure:
+
+```bash
+mkdir -p _Settings_/{Prompts,Bases,Templates,Skills,Tasks,Guidelines,History,History/Ambient,History/Capture,Logs}
+mkdir -p AI/{Analysis,Briefing,Canvas,Roundup,Summary,Writeup}
+mkdir -p Ingest/{Clippings,Documents}
+mkdir -p Journal
+mkdir -p Topics
+mkdir -p _Outbox_/BrainUpdates
+mkdir -p .gobi
+mkdir -p .claude
+```
+
+### FI-2: Fetch Root Config Files
+
+Fetch these files from the template repo into the vault root:
+
+```bash
+# Root configuration files
+for file in orchestrator.yaml AGENTS.md CLAUDE.md GEMINI.md BRAIN.md BRAIN_PROMPT.md VAULTS.md README.md .gitignore; do
+  gh api "repos/jykim/ai4pkm-vault/contents/${file}?ref=main" -q '.content' | base64 -d > "${file}"
+done
+```
+
+**Conflict handling**: If any file already exists:
+- Identical to template → skip silently
+- Differs from template → ask user: overwrite / skip / merge
+- `orchestrator.yaml` → always use merge logic (see Orchestrator Merge Rules)
+- `.gobi/settings.yaml` → never overwrite, only add missing keys
+
+### FI-3: Fetch .gobi/ Config
+
+```bash
+# settings.yaml
+gh api "repos/jykim/ai4pkm-vault/contents/.gobi/settings.yaml?ref=main" -q '.content' | base64 -d > .gobi/settings.yaml
+
+# syncfiles
+gh api "repos/jykim/ai4pkm-vault/contents/.gobi/syncfiles?ref=main" -q '.content' | base64 -d > .gobi/syncfiles
+```
+
+After creating `settings.yaml`, update user-specific values:
+- `claudePath` — set via: `which claude` (or user's actual path)
+- `vaultSlug` — will be set by `gobi init` during onboarding
+
+**If `.gobi/settings.yaml` already exists**: Preserve as-is, only add missing keys by merging.
+
+### FI-4: Fetch Prompts, Bases, Templates
+
+Use `gh api` directory listing to discover files dynamically (forward-compatible with new files added to the template):
+
+```bash
+# Fetch all prompts
+for file in $(gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Prompts?ref=main" -q '.[].name'); do
+  encoded=$(echo "$file" | sed 's/ /%20/g')
+  gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Prompts/${encoded}?ref=main" -q '.content' | base64 -d > "_Settings_/Prompts/${file}"
+done
+
+# Fetch all bases
+for file in $(gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Bases?ref=main" -q '.[].name'); do
+  encoded=$(echo "$file" | sed 's/ /%20/g')
+  gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Bases/${encoded}?ref=main" -q '.content' | base64 -d > "_Settings_/Bases/${file}"
+done
+
+# Fetch all templates
+for file in $(gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Templates?ref=main" -q '.[].name'); do
+  encoded=$(echo "$file" | sed 's/ /%20/g')
+  gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Templates/${encoded}?ref=main" -q '.content' | base64 -d > "_Settings_/Templates/${file}"
+done
+```
+
+### FI-5: Fetch Skills (Recursive)
+
+Skills are organized in subdirectories. List each skill directory, then fetch its files:
+
+```bash
+# List skill directories
+for skill_dir in $(gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Skills?ref=main" -q '.[] | select(.type=="dir") | .name'); do
+  mkdir -p "_Settings_/Skills/${skill_dir}"
+  # Fetch files in each skill directory
+  for file in $(gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Skills/${skill_dir}?ref=main" -q '.[] | select(.type=="file") | .name'); do
+    encoded_dir=$(echo "$skill_dir" | sed 's/ /%20/g')
+    encoded_file=$(echo "$file" | sed 's/ /%20/g')
+    gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Skills/${encoded_dir}/${encoded_file}?ref=main" -q '.content' | base64 -d > "_Settings_/Skills/${skill_dir}/${file}"
+  done
+done
+```
+
+### FI-6: Create .claude/skills Symlink
+
+```bash
+mkdir -p .claude
+ln -sf ../../_Settings_/Skills .claude/skills
+```
+
+### FI-7: Optional Git Init
+
+Offer to initialize version control:
+
+```
+볼트 설정이 완료됐어요! Git으로 버전 관리를 시작할까요?
+1. Git 초기화 + 초기 커밋
+2. 건너뛰기 (나중에 직접 설정)
+```
+
+If user chooses option 1:
+```bash
+git init
+git add -A
+git commit -m "Initial AI4PKM vault setup (v0.0.27)"
+```
+
+### Fresh Install Conflict Handling
+
+When a file already exists in the target directory during fresh install:
+
+| File | Behavior |
+|------|----------|
+| Identical to template | Skip silently |
+| Differs from template | Ask user: overwrite / skip / merge |
+| `orchestrator.yaml` | Always use merge logic (preserve custom nodes) |
+| `.gobi/settings.yaml` | Never overwrite — only add missing keys |
+| `.gobi/syncfiles` | Never overwrite — skip with message |
+| User content (`Journal/`, `Topics/`, etc.) | Never touch |
 
 ---
 
@@ -207,15 +430,19 @@ orchestrator:
 
 **Check**: `.gobi/settings.yaml` exists
 
-**Action**: Create `.gobi/` directory. Fetch template and customize:
-```bash
-mkdir -p .gobi
-gh api repos/jykim/ai4pkm-vault/contents/.gobi/settings.yaml?ref=main -q '.content' | base64 -d > .gobi/settings.yaml
-```
+**⚠️ Never overwrite existing server-related .gobi/ files.**
 
-Then update user-specific values:
-- `vaultSlug` — will be set by `gobi init`
-- `claudePath` — set to user's actual Claude CLI path (e.g., `which claude`)
+**Action**:
+- **If `.gobi/settings.yaml` does NOT exist** → Create `.gobi/` directory, fetch template, then prompt user to customize:
+  ```bash
+  mkdir -p .gobi
+  gh api "repos/jykim/ai4pkm-vault/contents/.gobi/settings.yaml?ref=main" -q '.content' | base64 -d > .gobi/settings.yaml
+  ```
+  Then update user-specific values:
+  - `vaultSlug` — will be set by `gobi init`
+  - `claudePath` — set to user's actual Claude CLI path (e.g., `which claude`)
+
+- **If `.gobi/settings.yaml` already exists** → **Preserve as-is**. Only add missing keys by merging (do not replace). Compare with template and add any keys that don't exist in the user's file.
 
 Default template content:
 ```yaml
@@ -237,12 +464,16 @@ voiceSettings:
 
 **Check**: `.gobi/syncfiles` exists
 
-**Action**: Fetch from repo or create with content:
-```bash
-gh api repos/jykim/ai4pkm-vault/contents/.gobi/syncfiles?ref=main -q '.content' | base64 -d > .gobi/syncfiles
-```
+**⚠️ Never overwrite existing server-related .gobi/ files.**
 
-Default content:
+**Action**:
+- **If `.gobi/syncfiles` does NOT exist** → Create from template:
+  ```bash
+  gh api "repos/jykim/ai4pkm-vault/contents/.gobi/syncfiles?ref=main" -q '.content' | base64 -d > .gobi/syncfiles
+  ```
+- **If `.gobi/syncfiles` already exists** → **Skip entirely** with message: "기존 syncfiles를 유지합니다"
+
+Default content (for new creation only):
 ```
 /BRAIN.jpg
 /BRAIN.md
@@ -257,7 +488,7 @@ Default content:
 
 **Fallback** (if onboarding is not available or user prefers manual setup): Fetch template from repo:
 ```bash
-gh api repos/jykim/ai4pkm-vault/contents/BRAIN.md?ref=main -q '.content' | base64 -d > BRAIN.md
+gh api "repos/jykim/ai4pkm-vault/contents/BRAIN.md?ref=main" -q '.content' | base64 -d > BRAIN.md
 ```
 
 Then user should customize. Template content:
@@ -298,7 +529,7 @@ created: 2024-01-01 00:00:00
 
 **Action**: Fetch from repo:
 ```bash
-gh api repos/jykim/ai4pkm-vault/contents/BRAIN_PROMPT.md?ref=main -q '.content' | base64 -d > BRAIN_PROMPT.md
+gh api "repos/jykim/ai4pkm-vault/contents/BRAIN_PROMPT.md?ref=main" -q '.content' | base64 -d > BRAIN_PROMPT.md
 ```
 
 Template content:
@@ -321,7 +552,7 @@ Template content:
 
 **Action**: Fetch from repo:
 ```bash
-gh api repos/jykim/ai4pkm-vault/contents/VAULTS.md?ref=main -q '.content' | base64 -d > VAULTS.md
+gh api "repos/jykim/ai4pkm-vault/contents/VAULTS.md?ref=main" -q '.content' | base64 -d > VAULTS.md
 ```
 
 Template content:
@@ -486,7 +717,7 @@ mkdir -p "_Outbox_/BrainUpdates"
 
 **Action**: Fetch latest `AGENTS.md` from GitHub template and do a section-level merge:
 ```bash
-gh api repos/jykim/ai4pkm-vault/contents/AGENTS.md?ref=main -q '.content' | base64 -d > /tmp/AGENTS_latest.md
+gh api "repos/jykim/ai4pkm-vault/contents/AGENTS.md?ref=main" -q '.content' | base64 -d > /tmp/AGENTS_latest.md
 ```
 Then compare sections and add any missing ones while preserving user customizations. See **AGENTS.md Merge Rules** below.
 
@@ -496,7 +727,7 @@ Then compare sections and add any missing ones while preserving user customizati
 
 ---
 
-## Epoch 3: Polish (v0.0.20 → v0.0.26)
+## Epoch 3: Polish (v0.0.20 → v0.0.27)
 
 *Version bump, AGENTS.md Gobi sections, CLAUDE.md refinements, onboarding skill updates.*
 
@@ -519,14 +750,14 @@ Then compare sections and add any missing ones while preserving user customizati
 **Action**: Fetch latest from GitHub. The onboarding skill changes frequently, so always pull the current version:
 ```bash
 # Fetch the entire gobi-onboarding skill directory
-for file in $(gh api repos/jykim/ai4pkm-vault/contents/_Settings_/Skills/gobi-onboarding?ref=main -q '.[].name'); do
+for file in $(gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Skills/gobi-onboarding?ref=main" -q '.[].name'); do
   gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Skills/gobi-onboarding/${file}?ref=main" -q '.content' | base64 -d > "_Settings_/Skills/gobi-onboarding/${file}"
 done
 ```
 
 ### 3.4 Update Version to Target
 
-**Action**: Set `version: "0.0.26"` in `orchestrator.yaml`.
+**Action**: Set `version: "0.0.27"` in `orchestrator.yaml`.
 
 ### 3.5 Add id/name Fields
 
@@ -536,46 +767,6 @@ done
 ```yaml
 id: ai4pkm_vault
 name: ai4pkm_vault
-```
-
----
-
-## Post-Migration: Community Onboarding Check
-
-After all epochs are applied and verification is complete, assess the user's BRAIN.md to determine community onboarding routing.
-
-### Routing Logic
-
-**1. No BRAIN.md exists**
-- Route to **gobi-onboarding skill** (full onboarding starting from Step 1)
-- The onboarding flow will create a personalized BRAIN.md through interactive conversation
-
-**2. BRAIN.md exists but is template/placeholder**
-- Detection: Contains generic "홍길동" content, or has less than 100 words of real content in the `## Welcome to My Second Brain` section
-- Route to **gobi-onboarding skill Step 4** (Community Onboarding only)
-- This sets up gobi-cli, authentication, space selection, and brain publish
-
-**3. BRAIN.md exists and is rich** (personalized, >100 words)
-- Skip community onboarding, suggest **brain enrichment** instead:
-  - `gobi brain publish` — sync BRAIN.md to community (if not already published)
-  - `gobi brain post-update` — share a brain update with the community
-  - Review and update BRAIN.md sections to reflect current interests/expertise
-
-### Implementation
-
-After Step 5 (Verify) completes successfully:
-
-```
-1. Check if BRAIN.md exists
-   ├── No → "BRAIN.md가 없어요. 온보딩을 통해 프로필을 만들어볼까요?"
-   │        → Invoke gobi-onboarding skill (full flow)
-   └── Yes → Read BRAIN.md content
-             ├── Template/placeholder (<100 words real content)
-             │   → "프로필이 아직 기본 템플릿이에요. 커뮤니티에 연결해볼까요?"
-             │   → Invoke gobi-onboarding skill Step 4 (Community Onboarding)
-             └── Rich content (>100 words, personalized)
-                 → "프로필이 잘 갖춰져 있어요! 커뮤니티에 공유해볼까요?"
-                 → Suggest: gobi brain publish, gobi brain post-update
 ```
 
 ---
@@ -613,7 +804,7 @@ AGENTS.md is section-based (H2 headers). Merge strategy:
 3. **For each section only in user's file** → keep it (user-added content)
 4. **Flag conflicts**: If a section exists in both but content differs significantly, show both and let user choose
 
-**Key sections to ensure exist** (as of v0.0.26):
+**Key sections to ensure exist** (as of v0.0.27):
 - `## Core Mission & Principles`
 - `## Prompts & Workflows`
 - `## Skills`
@@ -637,10 +828,10 @@ CLAUDE.md should be agent-specific (Claude Code only), referencing AGENTS.md for
 
 ---
 
-## Target orchestrator.yaml Structure (v0.0.26)
+## Target orchestrator.yaml Structure (v0.0.27)
 
 ```yaml
-version: 0.0.26
+version: 0.0.27
 orchestrator:
   prompts_dir: _Settings_/Prompts
   tasks_dir: _Settings_/Tasks
@@ -731,8 +922,21 @@ migrations:
     name: Polish
     applied_at: 2026-03-18T10:10:00-07:00
     from_version: "0.0.20"
-    to_version: "0.0.26"
+    to_version: "0.0.27"
     steps_applied: [3.1, 3.2, 3.3, 3.4, 3.5]
+    steps_skipped: []
+```
+
+For fresh installs, track as:
+
+```yaml
+migrations:
+  - epoch: fresh_install
+    name: Fresh Install
+    applied_at: 2026-03-18T10:00:00-07:00
+    from_version: null
+    to_version: "0.0.27"
+    steps_applied: [FI-1, FI-2, FI-3, FI-4, FI-5, FI-6, FI-7]
     steps_skipped: []
 ```
 
@@ -766,7 +970,7 @@ After migration completes, verify:
 - [ ] `_Outbox_/BrainUpdates/` exists
 
 ### Orchestrator
-- [ ] `version` is `0.0.26`
+- [ ] `version` is `0.0.27`
 - [ ] No deprecated fields (STT/TTS/wakeword)
 - [ ] Has `chat_history_dir`, `ambient_recording_dir`, `file_extensions`
 - [ ] Has `captures_dir`, `capture_prompt_path`
@@ -796,6 +1000,11 @@ After migration completes, verify:
 5. **User approval**: Always show plan before executing; never auto-apply
 6. **Preserve customizations**: User-added nodes, settings, and content are never removed
 7. **Track everything**: Log all changes to `.gobi/migrations.yaml`
+8. **Protected files**: Never overwrite existing `.gobi/` server-related files (`syncfiles`, `settings.yaml`, `sync_state_v3.db`) — these contain user-specific configuration and sync state. Only create if missing; merge missing keys if needed.
+9. **Backup required**: Always offer backup (git commit or zip) before starting migration (see Step 2)
+10. **Quote all URLs**: All `gh api` URL arguments must be wrapped in double quotes to prevent shell glob expansion of `?` characters
+11. **Never silently overwrite**: During fresh install, if an existing file differs from the template, always ask the user before overwriting (overwrite / skip / merge)
+12. **Dynamic file discovery**: Use `gh api` directory listing to discover template files rather than hardcoding filenames — this ensures forward-compatibility when new files are added to the template
 
 ---
 
@@ -827,3 +1036,25 @@ All modified files have `.bak.{timestamp}` backups. To roll back an epoch:
 1. Restore backed-up files
 2. Remove the epoch entry from `.gobi/migrations.yaml`
 3. Revert the version in `orchestrator.yaml`
+
+### "Vault root not detected"
+
+The skill looks for `orchestrator.yaml` or `.obsidian/` in the current directory and up to 5 parent directories. If neither is found:
+- Confirm you're in the right directory
+- For fresh install: any empty directory is fine — the skill will create everything
+- For upgrade: navigate to your vault root first, or specify the path when prompted
+
+### "gh api rate limit during fresh install"
+
+Fresh install makes many API calls to fetch all template files. If you hit GitHub's rate limit:
+- Wait a few minutes and retry
+- Use a GitHub Personal Access Token (PAT) for higher rate limits: `gh auth login --with-token`
+- The skill tracks progress, so retrying will skip already-fetched files
+
+### "Fresh install in non-empty directory"
+
+If the target directory already has files, the skill uses conflict handling:
+- Files identical to the template are skipped silently
+- Files that differ trigger a prompt: overwrite / skip / merge
+- User content directories (`Journal/`, `Topics/`, etc.) are never touched
+- `.gobi/settings.yaml` is never overwritten — only missing keys are added
