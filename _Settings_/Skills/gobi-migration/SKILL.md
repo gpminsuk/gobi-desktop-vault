@@ -213,8 +213,14 @@ After verification completes, automatically hand off to gobi-onboarding.
              │   → "마이그레이션이 완료됐어요! 프로필이 아직 기본 템플릿이에요. 온보딩을 시작할게요."
              │   → Read gobi-onboarding SKILL.md, invoke Step 4 (Community Onboarding)
              └── Rich content (>100 words, personalized)
-                 → "마이그레이션이 완료됐어요! 프로필이 잘 갖춰져 있어요. 커뮤니티에 공유해볼까요?"
-                 → Suggest: gobi brain publish, gobi brain post-update
+                 → Check publish status: `gobi brain search --query {vaultSlug}`
+                   (Read vaultSlug from .gobi/settings.yaml)
+                 ├── Already published (vaultSlug found in search results)
+                 │   → "마이그레이션이 완료됐어요! 프로필이 이미 커뮤니티에 공유돼 있어요."
+                 │   → Suggest: gobi brain post-update (share what's new)
+                 └── Not yet published (vaultSlug not found in search results)
+                     → "마이그레이션이 완료됐어요! 프로필이 잘 갖춰져 있어요. 커뮤니티에 공유해볼까요?"
+                     → Suggest: gobi brain publish
 ```
 
 ---
