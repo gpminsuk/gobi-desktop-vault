@@ -11,7 +11,7 @@ Options:
 
 Commands:
   list                               List spaces you are a member of.
-  warp                               Select the active space.
+  warp [spaceSlug]                   Select the active space. Pass a slug to warp directly, or omit for interactive selection.
   get-thread [options] <threadId>    Get a thread and its replies (paginated).
   list-threads [options]             List threads in a space (paginated).
   create-thread [options]            Create a thread in a space.
@@ -37,9 +37,9 @@ Options:
 ## warp
 
 ```
-Usage: gobi space warp [options]
+Usage: gobi space warp [options] [spaceSlug]
 
-Select the active space.
+Select the active space. Pass a slug to warp directly, or omit for interactive selection.
 
 Options:
   -h, --help  display help for command
@@ -79,9 +79,11 @@ Usage: gobi space create-thread [options]
 Create a thread in a space.
 
 Options:
-  --title <title>      Title of the thread
-  --content <content>  Thread content (markdown supported)
-  -h, --help           display help for command
+  --title <title>           Title of the thread
+  --content <content>       Thread content (markdown supported)
+  --auto-attachments        Upload wiki-linked [[files]] to webdrive before posting
+  --vault-slug <vaultSlug>  Vault slug for attachment uploads (overrides .gobi/settings.yaml)
+  -h, --help                display help for command
 ```
 
 ## edit-thread
@@ -92,9 +94,11 @@ Usage: gobi space edit-thread [options] <threadId>
 Edit a thread. You must be the author.
 
 Options:
-  --title <title>      New title for the thread
-  --content <content>  New content for the thread (markdown supported)
-  -h, --help           display help for command
+  --title <title>           New title for the thread
+  --content <content>       New content for the thread (markdown supported)
+  --auto-attachments        Upload wiki-linked [[files]] to webdrive before editing
+  --vault-slug <vaultSlug>  Vault slug for attachment uploads (overrides .gobi/settings.yaml)
+  -h, --help                display help for command
 ```
 
 ## delete-thread
@@ -128,8 +132,10 @@ Usage: gobi space edit-reply [options] <replyId>
 Edit a reply. You must be the author.
 
 Options:
-  --content <content>  New content for the reply (markdown supported)
-  -h, --help           display help for command
+  --content <content>       New content for the reply (markdown supported)
+  --auto-attachments        Upload wiki-linked [[files]] to webdrive before editing
+  --vault-slug <vaultSlug>  Vault slug for attachment uploads (overrides .gobi/settings.yaml)
+  -h, --help                display help for command
 ```
 
 ## delete-reply

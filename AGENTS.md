@@ -52,6 +52,11 @@ NEVER proactively create documentation or README files.
 - **If Obsidian is running**: Use `obsidian search query="term" path="Topics"` for full-text search, or `obsidian files folder="Topics"` to list files (see `obsidian-cli` skill)
 * **Consider `.gitignore` when searching files**: When finding file lists or searching content, use `respect_git_ignore=False` option to include all relevant files that might otherwise be excluded by `.gitignore`.
 
+## Obsidian CLI Usage
+- **열린 파일 경로 확인**: `obsidian file get-active` 사용 (workspace.json 직접 파싱 금지)
+- **열린 파일 내용 읽기**: `obsidian read` 사용 (디스크 파일과 Obsidian 상태가 다를 수 있음)
+- Obsidian에서 현재 보고 있는 파일 기준으로 작업할 때는 항상 위 CLI 명령어 우선 사용
+
 ## 📝 Content Creation Requirements
 ### General Guidelines
 - **Include original quotes** in blockquote format

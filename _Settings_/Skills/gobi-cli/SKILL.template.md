@@ -87,11 +87,14 @@ Check auth status anytime:
 gobi auth status
 ```
 
-**Important for agents**: Before running any `space` command, check if `.gobi/settings.yaml` exists in the current directory with both `vaultSlug` and `selectedSpaceSlug`. If the vault is missing, guide the user through `gobi init`. If only the space is missing, guide the user through `gobi space warp`. These commands require user input (interactive prompts), so the agent cannot run them silently. Note: `gobi brain` and `gobi session` commands also support `--space-slug` overrides.
+**Important for agents**: Before running any `space` command, check if `.gobi/settings.yaml` exists in the current directory with both `vaultSlug` and `selectedSpaceSlug`. If the vault is missing, guide the user through `gobi init`. If only the space is missing, guide the user through `gobi space warp`. These commands require user input (interactive prompts), so the agent cannot run them silently.
 
 ## Gobi Space — Community Channel
 
 `gobi space` is the main interface for interacting with the user's Gobi community. When the user asks about what's happening, what others are discussing, or wants to engage with their community — use `gobi space` commands. Think of it as the user's community feed and communication hub.
+
+- When the user wants to explore or catch up on what's happening in their space, invoke `/gobi:space-explore`.
+- When the user wants to share or post learnings from the current session, invoke `/gobi:space-share`.
 
 ## Gobi Brain — Knowledge Management
 
@@ -119,13 +122,19 @@ JSON responses have the shape `{ "success": true, "data": ... }` on success or `
 
 ## Space Slug Override
 
-Most `space`, `brain`, and `session` commands use the space from `.gobi/settings.yaml`. Override it with:
+`gobi space` commands use the space from `.gobi/settings.yaml`. Override it with a parent-level flag:
 
 ```bash
 gobi space --space-slug <slug> list-threads
-gobi brain --space-slug <slug> ask --vault-slug <vaultSlug> --question "..."
-gobi session --space-slug <slug> list
 ```
+
+For `gobi brain list-updates`, you can filter by space with a subcommand option:
+
+```bash
+gobi brain list-updates --space-slug <slug>
+```
+
+Note: `--space-slug` is not available on other `brain` subcommands or on `session` commands.
 
 ## Available Commands
 

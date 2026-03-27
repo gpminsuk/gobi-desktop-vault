@@ -5,7 +5,7 @@ description: >-
   to the latest template version. Detects current state, generates a
   plan, and applies changes with full backup safety.
 metadata:
-  version: 1.1.0
+  version: 1.2.0
   author: lifidea
   created: 2026-03-18
   target_version: 0.0.28
@@ -213,12 +213,17 @@ After verification completes, automatically hand off to gobi-onboarding.
              │   → "마이그레이션이 완료됐어요! 프로필이 아직 기본 템플릿이에요. 온보딩을 시작할게요."
              │   → Read gobi-onboarding SKILL.md, invoke Step 4 (Community Onboarding)
              └── Rich content (>100 words, personalized)
-                 → Check publish status: `gobi brain search --query {vaultSlug}`
-                   (Read vaultSlug from .gobi/settings.yaml)
-                 ├── Already published (vaultSlug found in search results)
+                 → Check publish status (two-layer approach):
+                   1. Read vaultSlug from .gobi/settings.yaml
+                      └── If vaultSlug missing → "먼저 gobi init으로 볼트를 연결해주세요." → Suggest: gobi init
+                   2. Primary: `gobi --json brain list-updates --mine --limit 1`
+                      └── If data array non-empty → Already published (confirmed)
+                   3. Fallback: `gobi --json brain search --query {vaultSlug}`
+                      └── Parse JSON; check if any item in data has vaultSlug EXACTLY matching
+                 ├── Already published (either check confirms)
                  │   → "마이그레이션이 완료됐어요! 프로필이 이미 커뮤니티에 공유돼 있어요."
                  │   → Suggest: gobi brain post-update (share what's new)
-                 └── Not yet published (vaultSlug not found in search results)
+                 └── Not yet published (both checks negative)
                      → "마이그레이션이 완료됐어요! 프로필이 잘 갖춰져 있어요. 커뮤니티에 공유해볼까요?"
                      → Suggest: gobi brain publish
 ```
@@ -282,20 +287,20 @@ After creating `settings.yaml`, update user-specific values:
 Use `gh api` directory listing to discover files dynamically (forward-compatible with new files added to the template):
 
 ```bash
-# Fetch all prompts
-for file in $(gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Prompts?ref=main" -q '.[].name'); do
+# Fetch all prompts (use while-read to handle filenames with spaces)
+gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Prompts?ref=main" -q '.[].name' | while IFS= read -r file; do
   encoded=$(echo "$file" | sed 's/ /%20/g')
   gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Prompts/${encoded}?ref=main" -q '.content' | base64 -d > "_Settings_/Prompts/${file}"
 done
 
 # Fetch all bases
-for file in $(gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Bases?ref=main" -q '.[].name'); do
+gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Bases?ref=main" -q '.[].name' | while IFS= read -r file; do
   encoded=$(echo "$file" | sed 's/ /%20/g')
   gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Bases/${encoded}?ref=main" -q '.content' | base64 -d > "_Settings_/Bases/${file}"
 done
 
 # Fetch all templates
-for file in $(gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Templates?ref=main" -q '.[].name'); do
+gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Templates?ref=main" -q '.[].name' | while IFS= read -r file; do
   encoded=$(echo "$file" | sed 's/ /%20/g')
   gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Templates/${encoded}?ref=main" -q '.content' | base64 -d > "_Settings_/Templates/${file}"
 done
@@ -306,12 +311,12 @@ done
 Skills are organized in subdirectories. List each skill directory, then fetch its files:
 
 ```bash
-# List skill directories
-for skill_dir in $(gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Skills?ref=main" -q '.[] | select(.type=="dir") | .name'); do
+# List skill directories (use while-read to handle names with spaces)
+gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Skills?ref=main" -q '.[] | select(.type=="dir") | .name' | while IFS= read -r skill_dir; do
   mkdir -p "_Settings_/Skills/${skill_dir}"
+  encoded_dir=$(echo "$skill_dir" | sed 's/ /%20/g')
   # Fetch files in each skill directory
-  for file in $(gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Skills/${skill_dir}?ref=main" -q '.[] | select(.type=="file") | .name'); do
-    encoded_dir=$(echo "$skill_dir" | sed 's/ /%20/g')
+  gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Skills/${encoded_dir}?ref=main" -q '.[] | select(.type=="file") | .name' | while IFS= read -r file; do
     encoded_file=$(echo "$file" | sed 's/ /%20/g')
     gh api "repos/jykim/ai4pkm-vault/contents/_Settings_/Skills/${encoded_dir}/${encoded_file}?ref=main" -q '.content' | base64 -d > "_Settings_/Skills/${skill_dir}/${file}"
   done
