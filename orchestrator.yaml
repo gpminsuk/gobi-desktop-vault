@@ -1,4 +1,4 @@
-version: 0.0.28
+version: 0.0.29
 orchestrator:
   prompts_dir: _Settings_/Prompts
   tasks_dir: _Settings_/Tasks
