@@ -23,8 +23,11 @@ NEVER proactively create documentation or README files.
 	- Use your judgment to complete the task unless asked otherwise
 
 ## Prompts & Workflows
-- Orchestrator config in `orchestrator.yaml` (root)
+- Orchestrator config in `orchestrator.yaml` (root) — defines I/O routing, schedules, triggers
 - Prompts can be found in `_Settings_/Prompts`
+  - Naming: `Full Title (ABC).md` (3-letter abbreviation in parentheses)
+  - Frontmatter: `title / abbreviation / category / created` — see `_Settings_/Templates/Prompt Template.md`
+  - I/O paths live in `orchestrator.yaml`, NOT in the prompt frontmatter
 - Agent system prompts in `_Settings_/Agents` (e.g. Real-time Voice Assistant)
 - Skills can be found in `.claude/skills`
 - Templates (of md docs) in `_Settings_/Templates`
