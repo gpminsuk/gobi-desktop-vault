@@ -11,18 +11,34 @@ gobi-desktop-vault/
 ├── .gobi/
 │   └── settings.yaml        # Gobi runtime settings (language, mic, LLM provider)
 ├── _Settings_/              # Vault configuration and system files
-│   ├── Agents/              # Agent system prompts
-│   ├── Prompts/             # AI agent prompts
+│   ├── Agents/              # Agent system prompts (e.g. RVA)
+│   ├── Prompts/             # Workflow/batch agent prompts
 │   ├── Templates/           # Markdown templates
 │   └── Logs/                # Execution logs
+├── Ingest/                  # Raw data from outside sources
+│   ├── Clippings/           # Web clippings, transcripts, captures
+│   └── Research/            # Research briefings, reference material
+├── Articles/                # User-authored content (user's thinking on ingested data)
+├── Topics/                  # Topical index / LLM wiki
 ├── orchestrator.yaml        # Agent orchestration config
 ├── AGENTS.md                # Generic AI agent rules
 ├── CLAUDE.md                # Claude-specific rules
-├── GEMINI.md                # Gemini-specific rules
-└── VAULTS.md                # Multi-vault registry
+├── PUBLISH.md               # Vault profile (published via gobi-vault)
+└── README.md
 ```
 
-User content folders (`AI/`, `Ingest/`, `Journal/`, `Topics/`, `_Settings_/Tasks/`) are gitignored — created on first use.
+## Content Flow
+
+```
+Ingest/  →  Articles/  →  Topics/
+(raw)       (user)        (wiki)
+```
+
+- **Ingest/** — collected from outside (clippings, research). Agents may enrich items in place.
+- **Articles/** — where you write. User-authored notes that synthesize ingested data with your own thinking.
+- **Topics/** — derived topical index maintained by agents (TIU). Search starts here.
+
+User content folders track only the folder skeleton (`.gitkeep`) in git; the contents themselves are gitignored. `AI/` is an agent workspace and is fully gitignored.
 
 ## Usage
 

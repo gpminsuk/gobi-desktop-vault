@@ -56,8 +56,24 @@ NEVER proactively create documentation or README files.
   - `gobi:gobi-media` - image/video/avatar generation
   - `gobi:gobi-homepage` - build/edit vault homepages
 
+## Content Folders (Data Flow)
+
+The vault's content flow has three stages, each in a dedicated root folder:
+
+```
+Ingest/         → Articles/      → Topics/
+(raw external)   (user thinking)   (LLM wiki / topical index)
+```
+
+- **`Ingest/`** — raw data collected from outside sources
+  - `Ingest/Clippings/` — web clippings, transcripts, captures (EIC enriches these)
+  - `Ingest/Research/` — research briefings and reference material (DRB writes here)
+- **`Articles/`** — user-authored content where the user infuses their own thinking with ingested data. This is **user-authored**, not AI-generated.
+- **`Topics/`** — topical indexing / LLM wiki. Index files derived from Articles (TIU maintains these).
+- **`AI/`** — agent workspace for machine-generated intermediate outputs (gitignored, not part of the user-visible flow).
+
 ## Search over files
-- For searching over topic or dates, start from `Topics` or `Roundup` folder
+- For searching over topic or dates, start from `Topics` or `Articles` folder
 - Follow markdown link to find related files (use `find` to find exact location)
 * **Consider `.gitignore` when searching files**: When finding file lists or searching content, use `respect_git_ignore=False` option to include all relevant files that might otherwise be excluded by `.gitignore`.
 
