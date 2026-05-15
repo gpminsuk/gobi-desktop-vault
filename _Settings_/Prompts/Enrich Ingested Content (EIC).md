@@ -39,10 +39,9 @@ Improve captured content through transcript correction, summarization, and knowl
    - Use quotes verbatim to convey author's voice
    - Don't add highlights in summary
 
-3. ENRICH USING TOPICS
-   - Link related KB topics (existing only)
-   - Add one-line summary to relevant KB topics
-   - Link to related summaries (books, etc.)
+3. ENRICH USING EXISTING KNOWLEDGE
+   - Link related Articles (existing only — verify file exists)
+   - Link to related summaries (books, clippings, etc.)
 ```
 
 ## Caveats
@@ -85,8 +84,6 @@ Improve captured content through transcript correction, summarization, and knowl
 - Preserve original prose structure
 - Overall length should equal original
 
-### Topic Linking
-- Only link to existing topics in KB
-- Validate all topic links before adding
-- Add meaningful one-line summaries to topics
-- **Tip**: Use `obsidian search query="keyword" path="Topics"` to discover existing topics; `obsidian unresolved` to verify all links resolve (see `obsidian-cli` skill)
+### Article Linking
+- Only link to existing Articles in the vault
+- Validate all article links resolve before adding

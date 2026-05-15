@@ -34,11 +34,5 @@ nodes:
     cron: 0 7 * * *
     output_path: Ingest/Research
     enabled: false
-  - type: agent
-    name: Topic Index Update (TIU)
-    cron: 30 4 * * *
-    input_path: Articles
-    output_path: Topics
-    enabled: false
 id: gobi_desktop_vault
 name: gobi_desktop_vault

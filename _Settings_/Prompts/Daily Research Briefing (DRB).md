@@ -13,11 +13,11 @@ tags:
 
 ## Purpose
 
-Generate a daily briefing on topics you're actively researching, based on your recently updated Topics files. Uses WebSearch to find the latest news, papers, and updates.
+Generate a daily briefing on topics you're actively researching, based on your recently updated Articles. Uses WebSearch to find the latest news, papers, and updates.
 
 ## Input
 
-- `Topics/` folder (auto-detect recently modified files)
+- `Articles/` folder (auto-detect recently modified files)
 - Maximum 5 topics per run
 
 ## Output
@@ -29,14 +29,12 @@ Generate a daily briefing on topics you're actively researching, based on your r
 
 ### Step 1: Identify Active Topics
 
-Scan `Topics/` folder for recently modified files (last 7 days):
+Scan `Articles/` folder for recently modified files (last 7 days):
 
 ```bash
-# Find recently modified topic files
-find Topics/ -name "*.md" -mtime -7 | sort -t/ -k2
+# Find recently modified articles
+find Articles/ -name "*.md" -mtime -7 | sort -t/ -k2
 ```
-
-> **Alternative (if Obsidian running)**: `obsidian files folder="Topics"` lists all topic files via Obsidian's index.
 
 **Selection criteria:**
 1. Sort by modification date (most recent first)
@@ -171,7 +169,7 @@ Brief overview of today's key findings across all topics.
 ```markdown
 ## Summary
 
-Today's briefing covers 3 active research areas: LLM Evaluation (new benchmark paper), PKM Tools (Obsidian plugin update), and Search Technology (algorithm changes).
+Today's briefing covers 3 active research areas: LLM Evaluation (new benchmark paper), PKM Tools (new tool release), and Search Technology (algorithm changes).
 
 ## Topic Updates
 

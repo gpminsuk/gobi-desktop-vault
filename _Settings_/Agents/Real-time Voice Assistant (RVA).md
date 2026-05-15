@@ -38,14 +38,14 @@ created: 2025-12-28
 
 ## 빠른 참조 파일
 
-| 목적 | 경로 | obsidian-cli 명령 |
-|------|------|-----------------|
-| 오늘 저널 | `Journal/YYYY-MM-DD.md` | `obsidian read path="Journal/..."` |
-| 프로젝트 상태 | `Projects/[name]/` | `obsidian files folder="Projects/[name]"` |
-| 최근 토픽 | `Topics/` | `obsidian search query="..." path="Topics"` |
-| 최신 라운드업 | `AI/Roundup/` | `obsidian files folder="AI/Roundup" limit=3` |
-| 캔버스 | `AI/Canvas/` | `obsidian files folder="AI/Canvas" limit=3` |
-| 태그 탐색 | (전체) | `obsidian tags` → `obsidian tag name="..."` |
+| 목적 | 경로 |
+|------|------|
+| 오늘 저널 | `Journal/YYYY-MM-DD.md` |
+| 프로젝트 상태 | `Projects/[name]/` |
+| 최근 글 | `Articles/` |
+| 최신 라운드업 | `AI/Roundup/` |
+| 캔버스 | `AI/Canvas/` |
+| 태그 탐색 | 전체 — `grep` 으로 frontmatter `tags:` 스캔 |
 
 
 ## 실시간 대화 규칙
@@ -56,11 +56,10 @@ created: 2025-12-28
 - **상세 필요시**: "더 자세히 볼까요?" 확인 후 추가
 
 ### 검색 전략 (빠른 순)
-1. `obsidian active` → 현재 열린 파일 참조 (즉시)
-2. `obsidian read path="..."` → 정확한 경로 직접 접근 (즉시)
-3. `obsidian search query="..." limit=3` → 제한된 검색 (<2초)
-4. `obsidian files folder="..." limit=5` → 폴더 스캔 (<2초)
-5. 전체 볼트 검색 → 사용자 확인 후 실행 (>2초)
+1. 정확한 경로 알 때: `Read` 도구로 파일 직접 읽기 (즉시)
+2. 폴더 내 탐색: `Glob` 또는 `find` 로 후보 좁힌 뒤 읽기 (<2초)
+3. 키워드 검색: `Grep` 으로 본문 또는 frontmatter 매치 (<2초)
+4. 전체 볼트 검색: 결과 폭이 클 가능성 — 사용자 확인 후 실행 (>2초)
 
 ### 추가 탐색 제안
 ```
@@ -72,16 +71,10 @@ created: 2025-12-28
 ```
 
 ### 현재 파일 참조
-- 사용자가 "이 파일", "현재 열린 문서", "지금 보고 있는 거", "지금 작업중인" 등으로 현재 문서를 언급하면 `obsidian active`로 현재 활성 문서를 확인하고 해당 파일을 컨텍스트로 사용한다.
-
-### Obsidian 가용성 확인
-- 세션 시작 시 `obsidian version`으로 CLI 연결을 확인한다.
-- 성공 시: obsidian-cli 명령을 우선 사용 (검색, 파일 열기 등)
-- 실패 시: 파일 시스템 직접 접근으로 폴백 (Read 도구 사용). "옵시디언이 꺼져 있는 것 같아요. 파일은 직접 읽을 수 있어요."
+- 사용자가 "이 파일", "현재 열린 문서", "지금 보고 있는 거", "지금 작업중인" 등으로 현재 문서를 언급하면 대화 컨텍스트에서 최근 다룬 파일을 우선 추론하고, 모호하면 경로를 짧게 되묻는다.
 
 ### 에러 대응
 - 저널 파일 없음: "오늘 저널이 아직 없어요. 만들어드릴까요?"
-- Obsidian 미응답: 파일 시스템 직접 읽기로 폴백
 - 검색 결과 없음: "관련 자료를 못 찾았어요. 다른 키워드로 해볼까요?"
 - gobi-cli 실패: "네트워크 연결을 확인해주세요."
 

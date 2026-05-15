@@ -1,6 +1,6 @@
 # Gobi Desktop Vault
 
-An Obsidian vault spec for the Gobi Desktop AI harness system. Forked from [AI4PKM](https://github.com/jykim/AI4PKM) and adapted for Gobi.
+A markdown vault spec for the Gobi Desktop AI harness system. Forked from [AI4PKM](https://github.com/jykim/AI4PKM) and adapted for Gobi.
 
 ## Structure
 
@@ -19,10 +19,8 @@ gobi-desktop-vault/
 │   ├── Clippings/           # Web clippings, transcripts, captures
 │   └── Research/            # Research briefings, reference material
 ├── Articles/                # User-authored content (user's thinking on ingested data)
-├── Topics/                  # Topical index / LLM wiki
 ├── orchestrator.yaml        # Agent orchestration config
-├── AGENTS.md                # Generic AI agent rules
-├── CLAUDE.md                # Claude-specific rules
+├── CLAUDE.md                # AI agent rules (generic + Claude-specific)
 ├── PUBLISH.md               # Vault profile (published via gobi-vault)
 └── README.md
 ```
@@ -30,21 +28,19 @@ gobi-desktop-vault/
 ## Content Flow
 
 ```
-Ingest/  →  Articles/  →  Topics/
-(raw)       (user)        (wiki)
+Ingest/  →  Articles/
+(raw)       (user thinking)
 ```
 
 - **Ingest/** — collected from outside (clippings, research). Agents may enrich items in place.
 - **Articles/** — where you write. User-authored notes that synthesize ingested data with your own thinking.
-- **Topics/** — derived topical index maintained by agents (TIU). Search starts here.
 
 User content folders track only the folder skeleton (`.gitkeep`) in git; the contents themselves are gitignored. `AI/` is an agent workspace and is fully gitignored.
 
 ## Usage
 
 1. Clone this repository
-2. Open the folder as an Obsidian vault
-3. Run the Gobi CLI pointed at this vault path
+2. Run the Gobi CLI pointed at this vault path
 
 ## Configuration
 
@@ -53,13 +49,10 @@ User content folders track only the folder skeleton (`.gitkeep`) in git; the con
 
 ## Agent Rules
 
-Agent behavior is governed by three files at the vault root:
+Agent behavior is governed by a single file at the vault root:
 
-- `AGENTS.md` — generic rules for all AI agents (Claude, Gemini, Codex)
-- `CLAUDE.md` — Claude Code specific overrides
-- `GEMINI.md` — Gemini CLI specific overrides
+- `CLAUDE.md` — generic AI agent rules + Claude Code specific overrides
 
 ## Related Projects
 
 - [AI4PKM](https://github.com/jykim/AI4PKM) — upstream PKM framework this vault was forked from
-- [claude-obsidian-skills](https://github.com/jykim/claude-obsidian-skills) — reusable Claude skills
