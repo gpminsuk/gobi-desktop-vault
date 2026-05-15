@@ -5,25 +5,8 @@ Topics/*
 AI/*
 _Settings_/Tasks/*
 
-# Keep directory structure
-!Ingest/.gitkeep
-!Journal/.gitkeep
-!Topics/.gitkeep
-!AI/.gitkeep
-!_Settings_/Tasks/.gitkeep
-
-# Secrets
-secrets.yaml
-
-# User test folder
-_UserTest_/
-
 # Logs
 *.log
 
 # macOS
 .DS_Store
-.obsidian/app.json
-.obsidian/daily-notes.json
-.obsidian/workspace.json
-_Settings_/Skills/gobi-onboarding/Archive/Brain Bootstrap Game (BBG) - deprecated.md

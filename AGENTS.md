@@ -12,7 +12,7 @@ NEVER proactively create documentation or README files.
 
 # Generic AI Agent Rules
 
-*These rules apply to all AI agents (Claude Code, Gemini, Codex) working in this PKM vault.*
+*These rules apply to all AI agents (Claude Code, Gemini, Codex) working in this Gobi Desktop vault.*
 
 ## Core Mission & Principles
 - **Your mission is to enhance and organize user's knowledge**
@@ -25,7 +25,8 @@ NEVER proactively create documentation or README files.
 ## Prompts & Workflows
 - Orchestrator config in `orchestrator.yaml` (root)
 - Prompts can be found in `_Settings_/Prompts`
-- Skills can be found in `_Settings_/Skills`
+- Agent system prompts in `_Settings_/Agents` (e.g. Real-time Voice Assistant)
+- Skills can be found in `.claude/skills`
 - Templates (of md docs) in `_Settings_/Templates`
 - Knowledge Tasks in `_Settings_/Tasks` (only when requested)
 - Each command can be called using abbreviations
@@ -33,36 +34,29 @@ NEVER proactively create documentation or README files.
 
 ## Cross-Framework Awareness
 - This vault is **interoperable** with the [cmds-system-files](https://github.com/johnfkoo951/cmds-system-files) framework by convention, not by merger. The two frameworks have different frontmatter schemas, folder taxonomies, and wikilink rules.
-- When you encounter content authored under cmds conventions (numeric folders `100`–`900`, `date created` / `date modified` frontmatter, emoji-prefixed wikilinks, English `description` field), treat it as **valid-but-foreign**. Do not rewrite it to ai4pkm conventions unless the user asks.
-- Mirrored cmds rules live in `_Settings_/Guidelines/cmds-system-files/` as read-only reference (see its README for source commit SHA and refresh command).
-- Full gap analysis, 4-option comparison, and translation cheat-sheet are kept in the owner's personal vault: `OVM/AI/Analysis/2026-04-21 CMDS x ai4pkm Compatibility Analysis - Claude Code.md` (not checked into this template).
-- The authoritative rules for THIS vault remain in `AGENTS.md` (this file), `CLAUDE.md`, and `GEMINI.md`.
+- When you encounter content authored under cmds conventions (numeric folders `100`–`900`, `date created` / `date modified` frontmatter, emoji-prefixed wikilinks, English `description` field), treat it as **valid-but-foreign**. Do not rewrite it to Gobi Desktop vault conventions unless the user asks.
+- The authoritative rules for THIS vault remain in `AGENTS.md` (this file) and `CLAUDE.md`.
 
 ## Skills
-- Skills are located in `_Settings_/Skills/`
+- Project skills are located in `.claude/skills/`
 - Each skill folder contains a `SKILL.md` with instructions
 - To use a skill, read the corresponding `SKILL.md` file first
-- Available skills include:
-  - `obsidian-links` - Wiki link formatting
-  - `obsidian-yaml-frontmatter` - YAML frontmatter standards
-  - `obsidian-markdown-structure` - Markdown structure guidelines
-  - `markdown-video` - Video generation from markdown
-  - `gemini-image-skill` - Image generation with Gemini
-  - `ai4pkm-cli` - AI4PKM CLI for orchestrator config, worker management, and vault updates
-  - `gobi-onboarding` - Gobi Desktop 3.0 voice onboarding flow
-  - `gobi-cli` - Gobi CLI for spaces, threads, brains, and sessions
-  - `obsidian-cli` - Obsidian CLI for search, link validation, properties, and file operations (requires running Obsidian)
+- Available project skills:
+  - `gobi-onboarding` - Gobi Desktop voice onboarding flow
+- Gobi CLI is exposed as user-invocable harness skills (no local folder needed):
+  - `gobi:gobi-core` - auth, vault init, space warp, CLI updates, session management
+  - `gobi:gobi-space` - posts and replies in community space (`gobi space`) and global feed (`gobi global`)
+  - `gobi:gobi-saved` - personal saved notes and bookmarked posts
+  - `gobi:gobi-sense` - activity and transcription records
+  - `gobi:gobi-draft` - agent-authored drafts (list, prioritize, action, revise)
+  - `gobi:gobi-vault` - publish/unpublish vault profile (root `PUBLISH.md`), sync local ↔ webdrive
+  - `gobi:gobi-media` - image/video/avatar generation
+  - `gobi:gobi-homepage` - build/edit vault homepages
 
 ## Search over files
 - For searching over topic or dates, start from `Topics` or `Roundup` folder
 - Follow markdown link to find related files (use `find` to find exact location)
-- **If Obsidian is running**: Use `obsidian search query="term" path="Topics"` for full-text search, or `obsidian files folder="Topics"` to list files (see `obsidian-cli` skill)
 * **Consider `.gitignore` when searching files**: When finding file lists or searching content, use `respect_git_ignore=False` option to include all relevant files that might otherwise be excluded by `.gitignore`.
-
-## Obsidian CLI Usage
-- **열린 파일 경로 확인**: `obsidian file get-active` 사용 (workspace.json 직접 파싱 금지)
-- **열린 파일 내용 읽기**: `obsidian read` 사용 (디스크 파일과 Obsidian 상태가 다를 수 있음)
-- Obsidian에서 현재 보고 있는 파일 기준으로 작업할 때는 항상 위 CLI 명령어 우선 사용
 
 ## 📝 Content Creation Requirements
 ### General Guidelines
@@ -88,8 +82,6 @@ tags:
 - **Blank line required before tables**: Markdown tables must have a blank line immediately before them to render properly
 
 ### Diagram Standards
-> **Detailed guide**: See `_Settings_/Skills/obsidian-mermaid/SKILL.md`
-
 - **Write diagrams in Mermaid**: Use Mermaid instead of ASCII art
 
 ### Table vs Diagram Selection
@@ -98,8 +90,6 @@ tags:
 - **Optimize document length**: Choose the format that expresses the same information more compactly
 
 ### Link Format Standards
-> **Detailed guide**: See `_Settings_/Skills/obsidian-links/SKILL.md`
-
 - Use Link Format below for page properties:
 ```yaml
   - "[[Page Title]]"
@@ -120,8 +110,6 @@ tags:
   - `→ **Related research**: [[path/to/file#section-name|display text]]`
 
 ### Properties & Frontmatter Standards
-> **Detailed guide**: See `_Settings_/Skills/obsidian-yaml-frontmatter/SKILL.md`
-
 - Use a single YAML block at top (`---` … `---`). Leave one blank line after it.
 - Keys are lowercase and consistent: `title`, `source` (URL), `author` (list), `created` (YYYY-MM-DD HH:MM:SS), `tags` (list)
 - **created property includes actual creation time**: When AI generates a document, record both date and time
@@ -154,7 +142,6 @@ tags:
   - Always link to the original article, clipping, or document where content first appeared
   - Example: Link to `[[Ingest/Clippings/2025-08-15 역스킬 현상]]` not `[[Topics/PKM#역스킬]]`
   - This maintains proper source attribution and traceability
-  - **Tip**: `obsidian unresolved` lists all broken links; `obsidian backlinks file="Note"` checks incoming links (see `obsidian-cli` skill)
 
 ## Source/Prompt-specific Guidelines
 ### Limitless Link Format
@@ -164,8 +151,6 @@ tags:
 - **If unsure about section**: Link to file only `[[Limitless/YYYY-MM-DD]]`
 
 ### Heading Structure Guidelines
-> **Detailed guide**: See `_Settings_/Skills/obsidian-markdown-structure/SKILL.md`
-
 - Clippings (EIC/ICT): begin with `## Summary`, then `## Improve Capture & Transcript (ICT)`, then transcript
 - ICT means improve the transcript (correct grammar, translate to Korean, structure with h3), not summarize. Keep length comparable to source; summaries live only under `## Summary`
 - Lifelog: use H1 `# YYYY-MM-DD Lifelog - <Assistant>` then H2 sections (Monologues, Conversations, etc.)
@@ -177,14 +162,11 @@ tags:
 - Don't ask permission for any non-file-changing operations (search/list/echo etc)
 - Always use local time (usually in Seattle area) for processing requests
 
-## Multi-Vault Operations
-- **Registry**: Vault information is defined in `VAULTS.md` - read before cross-vault operations
-
-## Gobi Space Features
-- 커뮤니티 상호작용은 gobi-cli를 통해 수행 (gobi-cli 스킬 참조)
-- **Space**: `gobi space create-thread`, `list-threads`, `create-reply` — 커뮤니티 스레드/댓글
-- **Brain**: `gobi brain post-update`, `list-updates`, `search`, `ask` — 지식 공유 및 검색
-- **Session**: `gobi session list`, `get`, `reply` — 1:1 대화
-
----
-*For agent-specific rules, refer to individual agent configuration files: CLAUDE.md, GEMINI.md, AGENTS.md*
+## Gobi CLI Features
+- Gobi CLI는 harness 레벨의 user-invocable 스킬(`gobi:*`)로 노출됨
+- **Space / Global Feed**: `gobi:gobi-space` — 커뮤니티 스페이스(`gobi space`)와 글로벌 피드(`gobi global`)의 posts/replies 읽기·쓰기
+- **Saved**: `gobi:gobi-saved` — 개인 saved notes 및 북마크한 posts 관리
+- **Sense**: `gobi:gobi-sense` — activity 및 transcription 기록 조회
+- **Draft**: `gobi:gobi-draft` — 에이전트가 작성한 draft 관리 (list/prioritize/action/revise)
+- **Vault**: `gobi:gobi-vault` — vault 프로필 publish/unpublish (root `PUBLISH.md`), local ↔ webdrive 동기화
+- **Core**: `gobi:gobi-core` — auth, vault init, space warp, CLI 업데이트, session 관리

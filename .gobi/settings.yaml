@@ -3,5 +3,4 @@ voiceSettings:
   primaryLanguage: ko
   secondaryLanguage: en
   micGain: 0.2
-  systemPromptFile: _Settings_/Prompts/Real-time Voice Assistant (RVA).md
   llmProvider: gobi

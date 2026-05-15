@@ -3,11 +3,8 @@ orchestrator:
   prompts_dir: _Settings_/Prompts
   tasks_dir: _Settings_/Tasks
   logs_dir: _Settings_/Logs
+  chat_history_dir: _Settings_/Chats
   skills_dir: .claude/skills
-  bases_dir: _Settings_/Bases
-  chat_history_dir: _Settings_/History
-  ambient_recording_dir: _Settings_/History/Ambient
-  system_prompt_file: _Settings_/Prompts/Real-time Voice Assistant (RVA).md
   max_concurrent: 3
   poll_interval: 1
   file_extensions:
@@ -33,35 +30,15 @@ nodes:
     output_path: AI/Summary
     output_type: new_file
   - type: agent
-    name: Extract Document to Markdown (EDM)
-    input_path: Ingest/Documents
-    output_path: AI/Summary
-    executor: claude_code
-    input_type: new_file
-    input_pattern: "*.pdf|*.docx|*.doc|*.txt|*.epub"
-    trigger_exclude_pattern: "*.md"
-    output_naming: "{title}.md"
-    enabled: true
-  - type: agent
     name: Daily Research Briefing (DRB)
     cron: 0 7 * * *
-    output_path: AI/Briefing
-    enabled: true
-  - type: agent
-    name: Generate Daily Roundup (GDR)
-    cron: 0 4 * * *
-    output_path: AI/Roundup
+    output_path: Ingest/Research
+    enabled: false
   - type: agent
     name: Topic Index Update (TIU)
     cron: 30 4 * * *
-    input_path: AI/Roundup
+    input_path: Articles
     output_path: Topics
-  - type: agent
-    name: Ambient Canvas Brainstorming (ACB)
-    input_path: _Settings_/History/Ambient
-    output_path: AI/Canvas
-    input_type: new_file
-    output_naming: "{datetime} {title}.canvas"
-    enabled: true
-id: ai4pkm_vault
-name: ai4pkm_vault
+    enabled: false
+id: gobi_desktop_vault
+name: gobi_desktop_vault

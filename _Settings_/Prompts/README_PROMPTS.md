@@ -1,6 +1,6 @@
 # Prompts Folder - Agent Definition Guidelines
 
-This folder contains canonical agent definitions for the AI4PKM orchestrator system. Each file defines an agent's behavior, input/output specifications, and processing logic.
+This folder contains canonical agent definitions for the Gobi Desktop AI harness system. Each file defines an agent's behavior, input/output specifications, and processing logic.
 
 ## File Naming Convention
 
