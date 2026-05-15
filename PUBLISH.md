@@ -1,10 +1,8 @@
 ---
-title: "My Vault"
-description: "Vault Description"
+description: "Vault Homepage Description"
 tags:
-  - profile
+  - homepage
 ---
 
 ## Introduction
 ## About this vault
-
