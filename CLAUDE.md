@@ -67,7 +67,7 @@ Ingest/         → Articles/
 ```
 
 - **`Ingest/`** — raw data collected from outside sources
-  - `Ingest/Clippings/` — web clippings, transcripts, captures (EIC enriches these)
+  - `Ingest/Clippings/` — web clippings, transcripts, captures (CAE enriches these)
   - `Ingest/Research/` — research briefings and reference material (DRB writes here)
 - **`Articles/`** — user-authored content where the user infuses their own thinking with ingested data. Authored by the user, often through dialogue with a deep-thinking agent.
 - **`Events/`** — events reference data (conferences, meetups, talks, etc.). One folder per event (e.g. `Events/YYYY-MM-DD Event Name/`) with `event.md` and optional `Sessions/` subfolder.
@@ -177,7 +177,7 @@ tags:
 - **If unsure about section**: Link to file only `[[Limitless/YYYY-MM-DD]]`
 
 ### Heading Structure Guidelines
-- Clippings (EIC/ICT): begin with `## Summary`, then `## Improve Capture & Transcript (ICT)`, then transcript
+- Clippings (CAE/ICT): begin with `## Summary`, then `## Improve Capture & Transcript (ICT)`, then transcript
 - ICT means improve the transcript (correct grammar, translate to Korean, structure with h3), not summarize. Keep length comparable to source; summaries live only under `## Summary`
 - Lifelog: use H1 `# YYYY-MM-DD Lifelog - <Assistant>` then H2 sections (Monologues, Conversations, etc.)
 - Articles: start with H2 summary; avoid duplicating title as H1

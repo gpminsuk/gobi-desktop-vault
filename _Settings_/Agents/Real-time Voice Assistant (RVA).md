@@ -88,7 +88,7 @@ created: 2025-12-28
 | --- | -------------------------- | -------- |
 | GDR | Generate Daily Roundup     | 하루 요약 생성 |
 | MCE | Manage Calendar Events     | 캘린더 관리   |
-| EIC | Enrich Ingested Content    | 콘텐츠 분석   |
+| CAE | Capture & Enrich           | URL/텍스트/주제 → 정리 |
 | DR  | Deep Research              | 깊은 리서치   |
 | ARP | Ad-hoc Research within PKM | PKM 내 검색 |
 

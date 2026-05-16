@@ -553,7 +553,7 @@ npm install -g @gobi-ai/cli
 
 ## 파이프라인 진행 모니터링
 
-온보딩 중 EIC/EDM 등 파이프라인이 트리거된 후, `_Settings_/Tasks/` 폴더의 태스크 파일을 통해 진행 상황을 추적한다.
+온보딩 중 CAE/EDM 등 파이프라인이 트리거된 후, `_Settings_/Tasks/` 폴더의 태스크 파일을 통해 진행 상황을 추적한다.
 
 ### 태스크 파일 구조
 
@@ -561,8 +561,8 @@ npm install -g @gobi-ai/cli
 - **파일명**: `YYYY-MM-DD {task_type} - {title}.md`
 - **주요 프론트매터 필드**:
   - `status`: `PROCESSING` → `PROCESSED` / `FAILED`
-  - `task_type`: `EIC`, `EDM`, `GDR`
-  - `output`: 출력 파일 위키 링크 (예: `[[AI/Summary/파일명 - EIC]]`)
+  - `task_type`: `CAE`, `EDM`, `GDR`
+  - `output`: 출력 파일 위키 링크 (예: `[[AI/Clippings/파일명 by CAE]]`)
   - `generation_log`: 로그 파일 링크
 
 ### 모니터링 방법
@@ -570,7 +570,7 @@ npm install -g @gobi-ai/cli
 파이프라인 트리거 후 다음 순서로 확인:
 
 1. **태스크 파일 감지**: `_Settings_/Tasks/`에서 해당 `task_type`의 최신 파일을 폴링 (최대 120초, 5초 간격)
-   - **파일시스템 활용**: `find _Settings_/Tasks -name "*EIC*.md" -newer ref-file | head -1`로 최신 태스크 파일 검색, `grep "^status:" task-file.md`로 frontmatter 상태 확인
+   - **파일시스템 활용**: `find _Settings_/Tasks -name "*CAE*.md" -newer ref-file | head -1`로 최신 태스크 파일 검색, `grep "^status:" task-file.md`로 frontmatter 상태 확인
 2. **상태 확인**: 프론트매터의 `status` 필드 읽기
    - `PROCESSED` → 성공, `output` 필드에서 결과 파일 경로 확인
    - `FAILED` → 실패, `generation_log`에서 원인 확인
@@ -581,7 +581,7 @@ npm install -g @gobi-ai/cli
 
 | 시점 | 파이프라인 | 모니터링 대상 |
 |------|-----------|-------------|
-| 2단계: 웹 클리핑 후 | EIC | `_Settings_/Tasks/*EIC*` → `AI/Summary/` 출력 |
+| 2단계: 웹 클리핑 후 | CAE | `_Settings_/Tasks/*CAE*` → `AI/Clippings/` 출력 |
 | 2단계: PDF 추가 후 | EDM | `_Settings_/Tasks/*EDM*` → `Ingest/Documents/*.md` 출력 |
 
 ### 사용자 피드백
@@ -593,7 +593,7 @@ npm install -g @gobi-ai/cli
 
 ### 대화 중 비동기 진행 안내
 
-EIC/EDM 등 파이프라인이 처리 시간이 길어질 때 (5분 이상) 자연스럽게 안내한다:
+CAE/EDM 등 파이프라인이 처리 시간이 길어질 때 (5분 이상) 자연스럽게 안내한다:
 
 - **트리거 시**: "오 분 정도 걸려요. 기다리는 동안 다음 단계 먼저 진행할까요?"
 - **완료 시**: 현재 대화를 끊지 않고 자연스럽게 알림 — "아까 가져온 자료 정리가 끝났어요! 나중에 에이아이 서머리 폴더에서 확인해보세요."

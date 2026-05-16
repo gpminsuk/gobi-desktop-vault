@@ -25,9 +25,9 @@ defaults:
   task_archived: false
 nodes:
   - type: agent
-    name: Enrich Ingested Content (EIC)
+    name: Capture & Enrich (CAE)
     input_path: Ingest/Clippings
-    output_path: AI/Summary
+    output_path: AI/Clippings
     output_type: new_file
   - type: agent
     name: Daily Research Briefing (DRB)
