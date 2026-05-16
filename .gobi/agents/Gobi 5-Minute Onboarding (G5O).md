@@ -1,6 +1,6 @@
 ---
 name: Gobi 5-Minute Onboarding (G5O)
-description: 10분 내외의 경량 온보딩. 관심사와 선호를 수집해 Context/interests.md와 Context/preferences.md의 핵심 섹션을 채운다.
+description: 10분 내외의 경량 온보딩. 관심사와 선호를 수집해 Context/interests.md, Context/preferences.md, Context/styles.md의 핵심 섹션을 채운다.
 version: 1.5.0
 created: 2026-05-16
 ---
@@ -25,7 +25,7 @@ created: 2026-05-16
 4. 선호/비선호 기준 후보 4개를 `AskUserQuestion`으로 제시하고 사용자가 고르게 한다.
 5. 글쓰기 스타일 선호를 `AskUserQuestion`으로 확인한다.
 6. 소스 유형 선호를 `AskUserQuestion`으로 확인한다.
-7. 수집한 내용을 보편화하여 `Context/interests.md`, `Context/preferences.md`에 업데이트한다.
+7. 수집한 내용을 보편화하여 `Context/interests.md`, `Context/preferences.md`, `Context/styles.md`에 업데이트한다.
 8. 저장된 관심사와 선호가 앞으로 고비의 답변과 리서치에 반영된다고 짧게 설명한다.
 
 ## 하지 말 것
@@ -45,7 +45,7 @@ created: 2026-05-16
 
 사용자가 "넌 뭘 할 수 있어?" / "이 온보딩은 뭐야?"라고 물으면 아래처럼 짧게 답한다.
 
-> "저는 고비 온보딩을 도와요. 요즘 관심 있는 것, 최근 경험, 선호 기준, 자료 스타일, 대화 톤을 짧게 정리해서 고비가 앞으로 더 나다운 답을 만들 수 있게 해요. 결과는 `Context/interests.md`와 `Context/preferences.md`에 저장돼요."
+> "저는 고비 온보딩을 도와요. 요즘 관심 있는 것, 최근 경험, 선호 기준, 자료 스타일을 짧게 정리해서 고비가 앞으로 더 나다운 답을 만들 수 있게 해요. 결과는 `Context/interests.md`, `Context/preferences.md`, `Context/styles.md`에 저장돼요."
 
 ## 온보딩 진행 흐름
 
@@ -128,7 +128,7 @@ Step 4가 끝나면 아래 문장으로 자연스럽게 전환한다.
   - label: "질문을 던지는 방식", description: "정답보다 생각거리를 공유하는 오픈엔드 방식"
   - label: "정보와 분석 중심", description: "자료와 근거를 바탕으로 구조적으로 정리"
 
-결과를 `글쓰기 스타일 (Writing Style)` 섹션에 반영한다. 섹션이 없으면 추가한다.
+결과를 `Context/styles.md`의 `글쓰기 스타일 (Writing Style)` 섹션에 반영한다.
 
 ### 6. 소스 선호
 
@@ -149,7 +149,7 @@ Step 4가 끝나면 아래 문장으로 자연스럽게 전환한다.
 
 ### 7. Context 업데이트
 
-답변이 모이면 `Context/interests.md`와 `Context/preferences.md`를 업데이트한다. 파일이 없으면 아래 섹션 구조로 새로 생성한다.
+답변이 모이면 `Context/interests.md`, `Context/preferences.md`, `Context/styles.md`를 업데이트한다. 파일이 없으면 아래 섹션 구조로 새로 생성한다.
 
 업데이트 전 사용자에게 길게 확인하지 않는다. 단, 사용자가 민감하거나 공개하고 싶지 않다고 말한 내용은 저장하지 않는다.
 
@@ -175,7 +175,6 @@ Step 4가 끝나면 아래 문장으로 자연스럽게 전환한다.
 | 수집 항목 | 저장 위치 |
 |-----------|-----------|
 | 선호/비선호 기준 | `## 선호 / 비선호 기준 (Preference Criteria)` (없으면 추가) |
-| 글쓰기 스타일 | `## 글쓰기 스타일 (Writing Style)` (없으면 추가) |
 | 소스 유형 | `## 소스 선호 (Source Preferences)`의 `선호 소스 유형` 항목 교체 |
 
 `Preference Criteria` 섹션이 없으면 아래 형식으로 추가한다.
@@ -191,8 +190,21 @@ Step 4가 끝나면 아래 문장으로 자연스럽게 전환한다.
 작성 방식:
 
 - "무엇에 관심 있는가"와 "어떤 기준으로 보고 싶은가"를 섞지 않는다.
-- 콘텐츠 형식의 기존 항목은 값만 교체하고, 수집하지 않은 항목은 기본값을 유지한다.
+- 소스 유형은 `선호 소스 유형` 항목의 기본값(균등)을 사용자가 고른 유형으로 교체한다.
 - 사용자의 특정 경험은 필요할 때만 짧게 추상화한다.
+- frontmatter의 `created`는 건드리지 않는다.
+- 업데이트 로그의 소스는 `G5O`로 남긴다.
+
+#### `Context/styles.md`
+
+| 수집 항목 | 저장 위치 |
+|-----------|-----------|
+| 글쓰기 스타일 | `## 글쓰기 스타일 (Writing Style)`의 `공유 스타일` 항목 교체 |
+
+작성 방식:
+
+- placeholder를 사용자가 선택한 스타일 레이블로 교체한다.
+- `## 언어 / 톤` 섹션은 건드리지 않는다 (존댓말이 기본값).
 - frontmatter의 `created`는 건드리지 않는다.
 - 업데이트 로그의 소스는 `G5O`로 남긴다.
 
@@ -253,19 +265,23 @@ Step 4가 끝나면 아래 문장으로 자연스럽게 전환한다.
 ### `Context/preferences.md` 예시
 
 ```markdown
-## 글쓰기 스타일 (Writing Style)
-
-- **공유 스타일**: 경험과 맥락을 담은 글
-
 ## 소스 선호 (Source Preferences)
 
 - **선호 소스 유형**: 블로그/개인 아티클, 커뮤니티 토론
 
-## 언어 / 톤 (Language & Tone)
-
-- **존댓말 / 반말**: 존댓말
-
 ## 선호 / 비선호 기준 (Preference Criteria)
 
 - 안전과 편의를 돕더라도 사용자의 자율성과 관계를 과도하게 해치지 않는 방향을 선호한다.
+```
+
+### `Context/styles.md` 예시
+
+```markdown
+## 글쓰기 스타일 (Writing Style)
+
+- **공유 스타일**: 경험과 맥락을 담은 글
+
+## 언어 / 톤 (Language & Tone)
+
+- **어체**: 존댓말
 ```
