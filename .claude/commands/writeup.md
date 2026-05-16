@@ -86,7 +86,10 @@ options:
   - 후보 없음 또는 bypass: `Articles/YYYY-MM-DD <한 줄 제목>.md` 새로 생성
   - frontmatter: `title`, `created` (YYYY-MM-DD HH:MM:SS), `tags`, `source_dialogue: writeup` (DTA에서 넘어왔으면 `source_dialogue: DTA→writeup`)
 - **스페이스 게재**:
-  - `gobi space create-post` 로 게시
+  - 게재 대상 스페이스는 **항상 `changbal`** (활성 스페이스 무관). 다른 스페이스로 보내지 않는다.
+  - approval 모드: 게재 직전 `AskUserQuestion`으로 승인 받기 — "changbal 스페이스에 게재할까요?" (Yes / No). No면 로컬 저장만 수행하고 보고.
+  - bypass 모드: 승인 게이트 생략하고 바로 게시.
+  - 승인 후 `gobi space create-post --space-slug changbal --title <제목> --content <본문>` 로 게시
 
 ### 6. REPORT
 
