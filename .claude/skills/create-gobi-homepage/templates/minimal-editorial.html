@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jyk - Brain</title>
+    <title>Brain</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 
     <style>
     * {
@@ -69,8 +68,6 @@
         display: flex;
         align-items: center;
         gap: 32px;
-        padding-right: 32px;
-        border-right: var(--border) solid var(--grey-800);
     }
 
     .profile-pic {
@@ -211,99 +208,12 @@
         background-color: var(--accent);
     }
 
-    /* K-Graph Section */
+    /* Hero Grid */
     .hero-grid {
         display: grid;
-        grid-template-columns: 3fr 2fr;
+        grid-template-columns: 1fr;
         gap: 0;
         align-items: center;
-    }
-
-    .kgraph-container {
-        position: relative;
-        height: 100%;
-        min-height: 280px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding-left: 32px;
-    }
-
-    .kgraph-container svg {
-        width: 100%;
-        height: 100%;
-    }
-
-    .kgraph-container {
-        cursor: pointer;
-    }
-
-    .kgraph-label {
-        position: absolute;
-        top: 8px;
-        right: 12px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 1.2px;
-        color: var(--grey-500);
-    }
-
-    /* Full-scale graph overlay */
-    .kgraph-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(250, 250, 247, 0.97);
-        z-index: 1000;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .kgraph-overlay.active {
-        display: flex;
-    }
-
-    .kgraph-overlay svg {
-        width: 100%;
-        height: 100%;
-    }
-
-    .kgraph-overlay-close {
-        position: absolute;
-        top: 24px;
-        right: 32px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 1.2px;
-        color: var(--grey-500);
-        background: var(--bg);
-        border: var(--border) solid var(--grey-700);
-        padding: 8px 16px;
-        cursor: pointer;
-        transition: all var(--transition);
-        z-index: 1001;
-    }
-
-    .kgraph-overlay-close:hover {
-        color: var(--accent);
-        border-color: var(--accent);
-    }
-
-    .kgraph-overlay-title {
-        position: absolute;
-        top: 28px;
-        left: 32px;
-        font-family: 'Inter', sans-serif;
-        font-size: 1.05rem;
-        font-weight: 600;
-        letter-spacing: 0.2px;
-        color: var(--grey-500);
-        z-index: 1001;
     }
 
     /* File Viewer Overlay */
@@ -609,186 +519,9 @@
         margin-bottom: 4px;
     }
 
-    /* Chat message markdown styling */
-    .chat-message a {
-        color: var(--accent);
-        text-decoration: underline;
-    }
-
-    .chat-message.human a {
-        color: var(--bg);
-    }
-
-    .chat-message p {
-        margin: 0 0 8px 0;
-    }
-
-    .chat-message p:last-child {
-        margin-bottom: 0;
-    }
-
-    .chat-message ul, .chat-message ol {
-        margin-left: 20px;
-        margin-top: 4px;
-        margin-bottom: 4px;
-    }
-
-    .chat-message code {
-        background-color: rgba(0,0,0,0.06);
-        padding: 1px 4px;
-        border-radius: 2px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.88em;
-    }
-
-    .chat-message blockquote {
-        border-left: 2px solid var(--accent);
-        padding-left: 10px;
-        margin: 4px 0;
-        color: var(--grey-500);
-    }
-
-    .chat-prompts {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        justify-content: center;
-        padding: 8px 0;
-    }
-
-    .chat-prompt-btn {
-        background: transparent;
-        border: var(--border) solid var(--grey-700);
-        color: var(--grey-500);
-        padding: 8px 14px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.78rem;
-        cursor: pointer;
-        transition: all var(--transition);
-        letter-spacing: 0.3px;
-    }
-
-    .chat-prompt-btn:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-    }
-
     .more-button {
         text-align: center;
         margin-top: 48px;
-    }
-
-    /* Chat Section */
-    .chat-container {
-        border: var(--border) solid var(--grey-800);
-        background-color: var(--grey-900);
-        display: flex;
-        flex-direction: column;
-        height: 500px;
-    }
-
-    .chat-header {
-        padding: 16px 20px;
-        border-bottom: var(--border) solid var(--grey-800);
-        background-color: var(--bg);
-        font-family: 'JetBrains Mono', monospace;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 0.82rem;
-        font-weight: 500;
-        color: var(--grey-500);
-    }
-
-    .chat-messages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .chat-message {
-        padding: 12px 16px;
-        border-radius: 2px;
-        font-size: 1rem;
-        line-height: 1.55;
-        max-width: 85%;
-        font-family: 'Crimson Pro', Georgia, serif;
-    }
-
-    .chat-message.human {
-        align-self: flex-end;
-        background-color: var(--accent);
-        color: var(--bg);
-        font-weight: 500;
-    }
-
-    .chat-message.assistant {
-        align-self: flex-start;
-        background-color: var(--bg);
-        color: var(--fg);
-        border: var(--border) solid var(--grey-800);
-    }
-
-    .chat-message.system {
-        align-self: center;
-        color: var(--grey-500);
-        font-size: 0.85rem;
-        font-style: italic;
-    }
-
-    .chat-input-area {
-        padding: 16px 20px;
-        border-top: var(--border) solid var(--grey-800);
-        display: flex;
-        gap: 8px;
-    }
-
-    .chat-input {
-        flex: 1;
-        background-color: var(--bg);
-        color: var(--fg);
-        border: var(--border) solid var(--grey-700);
-        padding: 10px 12px;
-        font-family: 'Crimson Pro', Georgia, serif;
-        font-size: 0.95rem;
-        transition: all var(--transition);
-    }
-
-    .chat-input:focus {
-        outline: none;
-        border-color: var(--accent);
-        box-shadow: 0 0 0 2px rgba(200, 85, 61, 0.12);
-    }
-
-    .chat-input::placeholder {
-        color: var(--grey-600);
-    }
-
-    .chat-send {
-        background-color: var(--accent);
-        color: var(--bg);
-        border: var(--border) solid var(--accent);
-        padding: 10px 18px;
-        font-family: 'JetBrains Mono', monospace;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: 500;
-        font-size: 0.82rem;
-        cursor: pointer;
-        transition: all var(--transition);
-    }
-
-    .chat-send:hover {
-        background-color: var(--accent-dim);
-        border-color: var(--accent-dim);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    }
-
-    .chat-send:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
     }
 
     /* Logging in state */
@@ -814,65 +547,6 @@
     @keyframes pulse {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.4; }
-    }
-
-    /* Tooltip */
-    .graph-tooltip {
-        position: fixed;
-        padding: 16px;
-        background: var(--bg);
-        border: var(--border) solid var(--accent);
-        color: var(--fg);
-        font-size: 0.85rem;
-        pointer-events: none;
-        z-index: 2000;
-        max-width: 320px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-        display: none;
-        opacity: 0;
-        transition: opacity 0.2s;
-        font-family: 'Crimson Pro', Georgia, serif;
-    }
-    .graph-tooltip h4 {
-        font-family: 'Inter', sans-serif;
-        font-weight: 600;
-        margin-bottom: 8px;
-        color: var(--accent);
-        font-size: 1rem;
-    }
-    .graph-tooltip p {
-        color: var(--grey-500);
-        line-height: 1.5;
-        margin: 0;
-    }
-
-    /* KG Menu */
-    .kg-menu {
-        position: absolute;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 12px;
-        background: var(--bg);
-        padding: 8px 16px;
-        border: var(--border) solid var(--grey-800);
-        border-radius: 100px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        z-index: 1002;
-    }
-    .kg-menu-item {
-        color: var(--grey-500);
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.72rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        cursor: pointer;
-        padding: 4px 12px;
-        transition: all var(--transition);
-    }
-    .kg-menu-item:hover, .kg-menu-item.active {
-        color: var(--accent);
     }
 
     /* Responsive */
@@ -911,28 +585,6 @@
             padding: 24px;
         }
 
-        .chat-container {
-            height: 400px;
-        }
-
-        /* Stack to 1 column on mobile */
-        .hero-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .hero-content {
-            border-right: none;
-            padding-right: 0;
-            border-bottom: var(--border) solid var(--grey-800);
-            padding-bottom: 24px;
-        }
-
-        .kgraph-container {
-            min-height: 200px;
-            padding-left: 0;
-            padding-top: 16px;
-        }
-
         .updates-grid {
             grid-template-columns: 1fr;
         }
@@ -951,42 +603,23 @@
                             <h1 id="vaultTitle">Loading...</h1>
                             <div class="hero-actions">
                                 <!-- HERO_LINKS:START -->
-                                <a href="https://jykim.github.io/" class="btn outline" target="_blank" style="font-size: 0.8rem; padding: 8px 16px;">RESEARCH</a>
-                                <a href="https://linktr.ee/jin.y.kim" class="btn outline" target="_blank" style="font-size: 0.8rem; padding: 8px 16px;">LINKS</a>
                                 <!-- HERO_LINKS:END -->
                                 <!-- FEATURE:INFOVIZ -->
                                 <button class="btn outline" onclick="setInfoVizFilter()" style="font-size: 0.8rem; padding: 8px 16px;">INFOVIZ</button>
                                 <!-- /FEATURE:INFOVIZ -->
-                                <!-- FEATURE:CHAT -->
-                                <button class="btn outline" onclick="scrollToChat()" style="font-size: 0.8rem; padding: 8px 16px;">CHAT</button>
-                                <!-- /FEATURE:CHAT -->
                             </div>
                         </div>
                         <div class="hero-desc" id="vaultDesc"></div>
                     </div>
                 </div>
-                <!-- FEATURE:KGRAPH -->
-                <div class="kgraph-container" id="kgraph">
-                    <span class="kgraph-label">Knowledge Graph</span>
-                </div>
-                <!-- /FEATURE:KGRAPH -->
             </div>
         </section>
-
-        <!-- FEATURE:KGRAPH -->
-        <div class="kgraph-overlay" id="kgraphOverlay">
-            <span class="kgraph-overlay-title">Knowledge Graph</span>
-            <button class="kgraph-overlay-close" onclick="closeKGraph()">ESC / CLOSE</button>
-            <div id="kgraphFull" style="width: 100%; height: 100%;"></div>
-            <div id="graphTooltip" class="graph-tooltip"></div>
-        </div>
-        <!-- /FEATURE:KGRAPH -->
 
         <!-- FEATURE:FILE_VIEWER -->
         <div class="file-overlay" id="fileOverlay">
             <div class="file-overlay-header">
                 <span class="file-overlay-title" id="fileOverlayTitle"></span>
-                <button class="kgraph-overlay-close" onclick="closeFileViewer()">ESC / CLOSE</button>
+                <button class="overlay-close" onclick="closeFileViewer()">ESC / CLOSE</button>
             </div>
             <div class="file-overlay-body" id="fileOverlayBody"></div>
         </div>
@@ -1005,38 +638,16 @@
             <!-- /FEATURE:PAGINATION -->
         </section>
 
-        <!-- FEATURE:CHAT -->
-        <section id="chatSection" style="padding: 80px 0; border-bottom: var(--border) solid var(--grey-800);">
-            <h2>Chat</h2>
-            <div class="chat-container">
-                <div class="chat-header">BRAIN CHAT</div>
-                <div class="chat-messages" id="chatMessages">
-                    <div class="chat-message system">Log in to start chatting</div>
-                    <div class="chat-prompts" id="chatPrompts" style="display: none;">
-                        <button class="chat-prompt-btn" onclick="fillPrompt(this)">What topics do you write about most?</button>
-                        <button class="chat-prompt-btn" onclick="fillPrompt(this)">Summarize your latest brain update</button>
-                        <button class="chat-prompt-btn" onclick="fillPrompt(this)">What are you working on recently?</button>
-                    </div>
-                </div>
-                <div class="chat-input-area" id="chatInputArea" style="display: none;">
-                    <input type="text" class="chat-input" id="chatInput" placeholder="Ask something..." />
-                    <button class="chat-send" id="chatSend" onclick="sendMessage()">SEND</button>
-                </div>
-            </div>
-        </section>
-        <!-- /FEATURE:CHAT -->
-
         <!-- Footer -->
         <footer style="padding: 32px 0; text-align: center;">
-            <a href="https://www.gobispace.com/@jyk?og=1" target="_blank" style="color: var(--grey-500); font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; text-decoration: none; letter-spacing: 1px; transition: color var(--transition);" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--grey-500)'">POWERED BY GOBI</a>
+            <a id="footerLink" href="https://www.gobispace.com/?og=1" target="_blank" style="color: var(--grey-500); font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; text-decoration: none; letter-spacing: 1px; transition: color var(--transition);" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--grey-500)'">POWERED BY GOBI</a>
         </footer>
     </div>
 
     <script>
-    // Configure marked: gobispace file links and relative links open in popup, others in new tab
+    // Configure marked
     const renderer = new marked.Renderer();
     renderer.link = function({ href, title, text }) {
-        // Intercept gobispace.com file links
         const fileMatch = href && href.match(/gobispace\.com\/@[^?]+\?file=([^&]+)/);
         let filePath = '';
         let isPopup = false;
@@ -1045,7 +656,6 @@
             filePath = decodeURIComponent(fileMatch[1]).replace(/\+/g, ' ');
             isPopup = true;
         } else if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:')) {
-            // It's a relative path in the vault
             filePath = href;
             isPopup = true;
         }
@@ -1061,7 +671,6 @@
     renderer.image = function({ href, title, text }) {
         let finalHref = href;
         if (href && !href.startsWith('http') && !href.startsWith('data:')) {
-            // Prepend webdrive URL for relative paths
             if (vault && vault.webdriveUrl) {
                 finalHref = getFileUrl(href);
             }
@@ -1073,19 +682,16 @@
 
     // Global state
     let vault = null;
-    let currentSession = null;
-    let allUpdates = [];
-    let updatesCursor = null;
+    let allArticles = [];
+    let displayedCount = 0;
+    const PAGE_SIZE = 8;
     let filterTopic = null;
     let infoVizOnly = false;
 
-    // Initialize on load
     async function init() {
-        // gobi.vault is available immediately
         vault = gobi.vault;
         updateHeroSection();
-        await loadBrainUpdates();
-        await initChat();
+        await loadArticles();
     }
 
     function updateHeroSection() {
@@ -1093,47 +699,91 @@
         document.getElementById('vaultTitle').textContent = vault.title || 'Brain';
         document.getElementById('vaultDesc').textContent = vault.description || '';
 
-        // Profile picture
-        if (vault.thumbnailPath) {
-            const picUrl = `https://d16t3dioqz0xo9.cloudfront.net/${vault.thumbnailPath}@128x128.webp`;
+        if (vault.slug) {
+            document.getElementById('footerLink').href = `https://www.gobispace.com/@${vault.slug}?og=1`;
+        }
+
+        if (vault.ownerProfilePictureUrl) {
             const picDiv = document.getElementById('profilePic');
-            picDiv.style.backgroundImage = `url('${picUrl}')`;
+            picDiv.style.backgroundImage = `url('${vault.ownerProfilePictureUrl}')`;
+            picDiv.style.backgroundSize = 'cover';
+            picDiv.style.backgroundPosition = 'center';
+            picDiv.textContent = '';
+        } else if (vault.thumbnailPath) {
+            const picDiv = document.getElementById('profilePic');
+            picDiv.style.backgroundImage = `url('${getFileUrl(vault.thumbnailPath)}')`;
             picDiv.style.backgroundSize = 'cover';
             picDiv.style.backgroundPosition = 'center';
             picDiv.textContent = '';
         }
     }
 
-    async function loadBrainUpdates() {
-        try {
-            const result = await gobi.listPersonalPosts({ limit: 8, cursor: null, orderBy: 'createdAt' });
-            allUpdates = result.data;
-            updatesCursor = result.pagination?.nextCursor;
-            renderUpdates();
+    function parseFrontmatter(content) {
+        const match = content.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+        if (!match) return { meta: {}, body: content };
 
-            // Load more for richer k-graph and better filtering, then render
-            let graphUpdates = [...allUpdates];
-            let graphCursor = updatesCursor;
-            for (let i = 0; i < 10 && graphCursor; i++) {
-                const more = await gobi.listPersonalPosts({ limit: 8, cursor: graphCursor, orderBy: 'createdAt' });
-                graphUpdates = graphUpdates.concat(more.data);
-                graphCursor = more.pagination?.nextCursor;
+        const yamlStr = match[1];
+        const body = match[2];
+        const meta = {};
+
+        yamlStr.split('\n').forEach(line => {
+            const kv = line.match(/^(\w+):\s*(.*)$/);
+            if (kv) {
+                const key = kv[1];
+                let val = kv[2].trim();
+                if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
+                if (val.startsWith("'") && val.endsWith("'")) val = val.slice(1, -1);
+                meta[key] = val;
+            } else if (line.match(/^\s+-\s+/)) {
+                const lastKey = Object.keys(meta).pop();
+                if (lastKey) {
+                    if (!Array.isArray(meta[lastKey])) meta[lastKey] = meta[lastKey] ? [meta[lastKey]] : [];
+                    meta[lastKey].push(line.replace(/^\s+-\s+/, '').replace(/^["']|["']$/g, ''));
+                }
+            }
+        });
+
+        if (meta.tags && !Array.isArray(meta.tags)) meta.tags = [meta.tags];
+
+        return { meta, body };
+    }
+
+    async function loadArticles() {
+        try {
+            const files = await gobi.listFiles('Articles');
+            const mdFiles = files.filter(f => f.name.endsWith('.md'));
+
+            const articles = [];
+            for (const file of mdFiles) {
+                try {
+                    const content = await gobi.readFile(`Articles/${file.name}`);
+                    const { meta, body } = parseFrontmatter(content);
+                    articles.push({
+                        id: file.name,
+                        title: meta.title || file.name.replace(/\.md$/, ''),
+                        tags: meta.tags || [],
+                        created: meta.created || '',
+                        content: body,
+                        path: `Articles/${file.name}`
+                    });
+                } catch (e) {
+                    console.warn(`Skipped ${file.name}:`, e);
+                }
             }
 
-            allUpdates = graphUpdates; // Use full set for local filtering
-            window.graphUpdates = graphUpdates;
-
-            renderKGraph(graphUpdates);
+            articles.sort((a, b) => (b.created || '').localeCompare(a.created || ''));
+            allArticles = articles;
+            displayedCount = PAGE_SIZE;
+            renderArticles();
         } catch (e) {
-            console.error('Failed to load updates:', e);
+            console.error('Failed to load articles:', e);
             document.getElementById('updatesList').innerHTML =
-                '<div style="color: var(--grey-500);">Failed to load updates</div>';
+                '<div style="color: var(--grey-500); font-family: \'JetBrains Mono\', monospace;">Failed to load articles</div>';
         }
     }
 
     function getFileUrl(path) {
         const { vaultId, webdriveUrl } = vault;
-        // Ensure path is not double encoded
         const cleanPath = decodeURIComponent(path.replace(/\+/g, ' '));
         const encoded = cleanPath.split('/').map(encodeURIComponent).join('/');
         return `${webdriveUrl}/api/v1/file/raw/${vaultId}/${encoded}`;
@@ -1149,8 +799,6 @@
     }
 
     function resolveWikiLinks(markdown) {
-        // [[path/to/file|display text]] → clickable inline popup viewer
-        // [[path/to/file]] → filename only
         return markdown.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, path, display) => {
             const label = display || path.split('/').pop();
             const filePath = path.trim() + (path.includes('.') ? '' : '.md');
@@ -1158,66 +806,69 @@
         });
     }
 
-    function renderUpdates() {
+    function renderArticles() {
         const listContainer = document.getElementById('updatesList');
 
-        // Apply filters
-        let filtered = allUpdates;
+        let filtered = allArticles;
 
         if (filterTopic) {
-            filtered = filtered.filter(u => (u.topics || []).some(t => t.name === filterTopic));
+            filtered = filtered.filter(a => (a.tags || []).some(t => t === filterTopic));
         }
 
         if (infoVizOnly) {
-            filtered = filtered.filter(u =>
-                u.content.toLowerCase().includes('.html') ||
-                (u.topics || []).some(t => t.name.toLowerCase().includes('viz') || t.name.toLowerCase().includes('인포'))
+            filtered = filtered.filter(a =>
+                a.content.toLowerCase().includes('.html') ||
+                (a.tags || []).some(t => t.toLowerCase().includes('viz') || t.toLowerCase().includes('인포'))
             );
         }
 
-        // Show filter status if active
+        const visible = filtered.slice(0, displayedCount);
+
         let filterHeader = '';
         if (filterTopic || infoVizOnly) {
             filterHeader = `
                 <div style="grid-column: 1 / -1; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; font-family: 'JetBrains Mono', monospace;">
                     <span style="color: var(--grey-500);">FILTERING BY:</span>
-                    ${filterTopic ? `<span class="topic-badge" style="margin-bottom: 0;">${filterTopic}</span>` : ''}
+                    ${filterTopic ? `<span class="topic-badge" style="margin-bottom: 0;">${escapeHtml(filterTopic)}</span>` : ''}
                     ${infoVizOnly ? `<span class="topic-badge" style="margin-bottom: 0; background: var(--fg); color: var(--bg);">INFOVIZ</span>` : ''}
                     <button onclick="clearFilters()" style="background: none; border: 1px solid var(--grey-700); color: var(--grey-500); padding: 4px 12px; cursor: pointer; font-family: inherit; font-size: 0.75rem; text-transform: uppercase;">Clear</button>
                 </div>
             `;
         }
 
-        const html = filtered.map((update) => {
-            const processed = resolveWikiLinks(resolveWikiImages(update.content));
+        const html = visible.map((article, idx) => {
+            const processed = resolveWikiLinks(resolveWikiImages(article.content));
             const renderedContent = marked.parse(processed);
-            const previewContent = marked.parse(resolveWikiLinks(update.content.substring(0, 300)));
+            const previewContent = marked.parse(escapeHtml(article.content.substring(0, 300)));
             return `
-            <div class="update-card" onclick="toggleUpdateDetail(event, ${update.id})" style="cursor: pointer;">
-                <h3>${escapeHtml(update.title)} <a href="https://www.gobispace.com/@${vault.slug || 'jyk'}?postId=${update.id}" target="_blank" rel="noopener" onclick="event.stopPropagation();" class="permalink-icon" title="Permalink">🔗</a></h3>
+            <div class="update-card" onclick="toggleArticleDetail(event, '${escapeHtml(article.id)}')" style="cursor: pointer;">
+                <h3>${escapeHtml(article.title)}</h3>
                 <div class="update-meta">
-                    <span class="update-date">${formatDate(update.createdAt)}</span>
+                    <span class="update-date">${article.created ? formatDate(article.created) : ''}</span>
                     <span>•</span>
-                    <span>${Math.max(1, Math.ceil(update.content.length / 500))} min read</span>
+                    <span>${Math.max(1, Math.ceil(article.content.length / 500))} min read</span>
                 </div>
-                ${update.topics?.length ? `
+                ${article.tags?.length ? `
                     <div class="topics">
-                        ${update.topics.slice(0, 3).map(t => `<span class="topic-badge" onclick="event.stopPropagation(); setTopicFilter('${escapeHtml(t.name)}')">${t.name}</span>`).join('')}
+                        ${article.tags.slice(0, 3).map(t => `<span class="topic-badge" onclick="event.stopPropagation(); setTopicFilter('${escapeHtml(t)}')">${escapeHtml(t)}</span>`).join('')}
                     </div>
                 ` : ''}
-                <div class="update-preview" id="preview-${update.id}">${previewContent}</div>
-                <div class="update-full" id="full-${update.id}" style="display: none;">${renderedContent}</div>
+                <div class="update-preview" id="preview-${idx}">${previewContent}</div>
+                <div class="update-full" id="full-${idx}" style="display: none;">${renderedContent}</div>
             </div>
         `;
         }).join('');
 
-        listContainer.innerHTML = filterHeader + (html || '<div style="color: var(--grey-500); font-family: \'JetBrains Mono\', monospace;">No matching updates found</div>');
+        listContainer.innerHTML = filterHeader + (html || '<div style="color: var(--grey-500); font-family: \'JetBrains Mono\', monospace;">No matching articles found</div>');
+
+        const moreBtn = document.querySelector('.more-button');
+        if (moreBtn) moreBtn.style.display = (filtered.length > displayedCount) ? '' : 'none';
     }
 
     function setTopicFilter(topicName) {
         filterTopic = topicName;
-        renderUpdates();
-        // If from mobile, scroll to top of list
+        displayedCount = PAGE_SIZE;
+        renderArticles();
         if (window.innerWidth <= 768) {
             document.querySelector('.updates-section').scrollIntoView({ behavior: 'smooth' });
         }
@@ -1225,20 +876,23 @@
 
     function setInfoVizFilter() {
         infoVizOnly = !infoVizOnly;
-        renderUpdates();
+        displayedCount = PAGE_SIZE;
+        renderArticles();
         document.querySelector('.updates-section').scrollIntoView({ behavior: 'smooth' });
     }
 
     function clearFilters() {
         filterTopic = null;
         infoVizOnly = false;
-        renderUpdates();
+        displayedCount = PAGE_SIZE;
+        renderArticles();
     }
 
-    function toggleUpdateDetail(event, updateId) {
+    function toggleArticleDetail(event, articleId) {
         if (event.target.closest('a')) return;
-        const preview = document.getElementById(`preview-${updateId}`);
-        const full = document.getElementById(`full-${updateId}`);
+        const card = event.currentTarget;
+        const preview = card.querySelector('[id^="preview-"]');
+        const full = card.querySelector('[id^="full-"]');
         if (preview.style.display !== 'none') {
             preview.style.display = 'none';
             full.style.display = 'block';
@@ -1248,457 +902,20 @@
         }
     }
 
-    async function loadMoreUpdates() {
-        if (!updatesCursor) return;
-        try {
-            const result = await gobi.listPersonalPosts({ limit: 8, cursor: updatesCursor, orderBy: 'createdAt' });
-            allUpdates = allUpdates.concat(result.data);
-            updatesCursor = result.pagination?.nextCursor;
-            renderUpdates();
-        } catch (e) {
-            console.error('Failed to load more:', e);
-        }
+    function loadMoreUpdates() {
+        displayedCount += PAGE_SIZE;
+        renderArticles();
     }
 
-    async function initChat() {
-        try {
-            const sessions = await gobi.getSessions({ limit: 1 });
-            if (sessions.data && sessions.data.length > 0) {
-                currentSession = sessions.data[0];
-                showChatUI();
-                await loadChatHistory();
-            } else {
-                document.getElementById('chatMessages').innerHTML =
-                    '<div class="chat-message system">Log in to start chatting</div>';
-            }
-        } catch (e) {
-            console.error('Chat init error:', e);
-        }
-    }
-
-    function showChatUI() {
-        document.getElementById('chatInputArea').style.display = 'flex';
-        document.getElementById('chatMessages').innerHTML = '';
-        // Re-add prompt suggestions
-        const prompts = document.createElement('div');
-        prompts.className = 'chat-prompts';
-        prompts.id = 'chatPrompts';
-        prompts.innerHTML = `
-            <button class="chat-prompt-btn" onclick="fillPrompt(this)">What topics do you write about most?</button>
-            <button class="chat-prompt-btn" onclick="fillPrompt(this)">Summarize your latest brain update</button>
-            <button class="chat-prompt-btn" onclick="fillPrompt(this)">What are you working on recently?</button>
-        `;
-        document.getElementById('chatMessages').appendChild(prompts);
-    }
-
-    function fillPrompt(btn) {
-        const input = document.getElementById('chatInput');
-        input.value = btn.textContent;
-        input.focus();
-        // Hide prompts
-        const prompts = document.getElementById('chatPrompts');
-        if (prompts) prompts.style.display = 'none';
-    }
-
-    async function loadChatHistory() {
-        try {
-            const result = await gobi.loadMessages(currentSession.sessionId, { limit: 10 });
-            const messages = result?.messages || result || [];
-            if (Array.isArray(messages) && messages.length > 0) {
-                document.getElementById('chatMessages').innerHTML = messages
-                    .reverse()
-                    .map(m => `
-                        <div class="chat-message ${m.role}">
-                            ${m.role === 'human' ? escapeHtml(m.content) : marked.parse(m.content)}
-                        </div>
-                    `).join('');
-                scrollChatBottom();
-            }
-        } catch (e) {
-            console.error('Failed to load history:', e);
-            // Silently fail - empty chat is fine
-        }
-    }
-
-    async function sendMessage() {
-        const input = document.getElementById('chatInput');
-        const text = input.value.trim();
-        if (!text) return;
-
-        input.value = '';
-        input.disabled = true;
-
-        // Add user message
-        const messagesDiv = document.getElementById('chatMessages');
-        const userMsg = document.createElement('div');
-        userMsg.className = 'chat-message human';
-        userMsg.textContent = text;
-        messagesDiv.appendChild(userMsg);
-        scrollChatBottom();
-
-        // Add loading indicator
-        const loadingMsg = document.createElement('div');
-        loadingMsg.className = 'chat-message assistant';
-        loadingMsg.innerHTML = '<div class="loading"></div>';
-        messagesDiv.appendChild(loadingMsg);
-        scrollChatBottom();
-
-        try {
-            let response = '';
-            await gobi.sendMessage(currentSession.sessionId, text, (delta) => {
-                response += delta;
-                loadingMsg.innerHTML = marked.parse(response);
-                scrollChatBottom();
-            });
-            input.disabled = false;
-            input.focus();
-        } catch (e) {
-            console.error('Send error:', e);
-            loadingMsg.textContent = 'Error: ' + e.message;
-            input.disabled = false;
-        }
-    }
-
-    function scrollChatBottom() {
-        const msgs = document.getElementById('chatMessages');
-        setTimeout(() => msgs.scrollTop = msgs.scrollHeight, 0);
-    }
-
-    function scrollToChat() {
-        document.getElementById('chatSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    function formatDate(isoString) {
-        const date = new Date(isoString);
+    function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return dateStr;
         return date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
     }
 
     function escapeHtml(text) {
         const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-        return text.replace(/[&<>"']/g, m => map[m]);
-    }
-
-    // Store graph data for full-scale view
-    let kgraphData = null;
-
-    function buildGraphData(updates) {
-        const nodes = [];
-        const links = [];
-        const topicCounts = new Map(); // name -> count
-
-        // 1. Count topic occurrences across all updates
-        updates.forEach(u => {
-            (u.topics || []).forEach(t => {
-                topicCounts.set(t.name, (topicCounts.get(t.name) || 0) + 1);
-            });
-        });
-
-        // 2. Get top 30 topics
-        const topTopicNames = Array.from(topicCounts.entries())
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 30)
-            .map(entry => entry[0]);
-        const topTopicsSet = new Set(topTopicNames);
-
-        const topicNodesMap = new Map(); // name -> node
-        const postNodesMap = new Map();  // id -> node
-
-        // 3. Create nodes and links for top topics and their posts
-        updates.forEach(u => {
-            const relevantTopics = (u.topics || []).filter(t => topTopicsSet.has(t.name));
-
-            // Only add post if it links to at least one top topic
-            if (relevantTopics.length > 0) {
-                const postNode = {
-                    id: `post-${u.id}`,
-                    idNum: u.id,
-                    type: 'post',
-                    title: u.title,
-                    content: u.content.substring(0, 200) + '...',
-                    date: u.createdAt,
-                    val: 1
-                };
-                nodes.push(postNode);
-                postNodesMap.set(u.id, postNode);
-
-                relevantTopics.forEach(t => {
-                    let topicNode = topicNodesMap.get(t.name);
-                    if (!topicNode) {
-                        topicNode = {
-                            id: `topic-${t.name}`,
-                            type: 'topic',
-                            name: t.name,
-                            val: topicCounts.get(t.name)
-                        };
-                        topicNodesMap.set(t.name, topicNode);
-                        nodes.push(topicNode);
-                    }
-
-                    links.push({
-                        source: postNode.id,
-                        target: topicNode.id,
-                        type: 'post-topic'
-                    });
-                });
-            }
-        });
-
-        // 4. Link top topics to each other if they share posts
-        const names = Array.from(topicNodesMap.keys());
-        for (let i = 0; i < names.length; i++) {
-            for (let j = i + 1; j < names.length; j++) {
-                const t1 = names[i];
-                const t2 = names[j];
-                const sharedCount = updates.filter(u => {
-                    const uTopics = (u.topics || []).map(t => t.name);
-                    return uTopics.includes(t1) && uTopics.includes(t2);
-                }).length;
-
-                if (sharedCount > 0) {
-                    links.push({
-                        source: `topic-${t1}`,
-                        target: `topic-${t2}`,
-                        weight: sharedCount,
-                        type: 'topic-topic'
-                    });
-                }
-            }
-        }
-
-        return { nodes, links };
-    }
-
-    function drawGraph(containerId, width, height, data, opts = {}) {
-        const { nodeRange = [4, 16], fontSize = '9px', distance = 100, charge = -150 } = opts;
-        const container = document.getElementById(containerId);
-        const tooltip = document.getElementById('graphTooltip');
-        container.querySelectorAll('svg').forEach(s => s.remove());
-
-        // Shallow copy for D3
-        let nodes = data.nodes.map(d => ({ ...d }));
-        let links = data.links.map(d => ({ ...d }));
-
-        // Filter based on active menu item
-        const activeFilter = document.querySelector('.kg-menu-item.active')?.textContent.toLowerCase() || 'all';
-        if (activeFilter === 'post') {
-            nodes = nodes.filter(n => n.type === 'post');
-            links = []; // Only posts, no links in this mode
-        } else if (activeFilter === 'topic') {
-            nodes = nodes.filter(n => n.type === 'topic');
-            links = links.filter(l => l.type === 'topic-topic');
-        }
-
-        if (nodes.length === 0) return;
-
-        const svg = d3.select(`#${containerId}`)
-            .append('svg')
-            .attr('viewBox', `0 0 ${width} ${height}`)
-            .attr('preserveAspectRatio', 'xMidYMid meet');
-
-        const maxVal = d3.max(nodes, d => d.val) || 1;
-        const radiusScale = d3.scaleSqrt().domain([1, maxVal]).range(nodeRange);
-
-        const simulation = d3.forceSimulation(nodes)
-            .force('link', d3.forceLink(links).id(d => d.id).distance(l => l.type === 'post-topic' ? distance * 0.4 : distance).strength(0.5))
-            .force('charge', d3.forceManyBody().strength(charge))
-            .force('center', d3.forceCenter(width / 2, height / 2))
-            .force('collision', d3.forceCollide().radius(d => d.type === 'topic' ? radiusScale(d.val) + 20 : 12));
-
-        const link = svg.append('g')
-            .selectAll('line')
-            .data(links.filter(l => l.type === 'post-topic'))
-            .join('line')
-            .attr('stroke', 'var(--grey-700)')
-            .attr('stroke-width', 1)
-            .attr('stroke-opacity', 0.4);
-
-        const node = svg.append('g')
-            .selectAll('g')
-            .data(nodes)
-            .join('g')
-            .style('cursor', 'pointer')
-            .on('mouseenter', (event, d) => {
-                if (containerId !== 'kgraphFull') return; // Only tooltips in full view
-                tooltip.style.display = 'block';
-                tooltip.style.opacity = '1';
-
-                let content = '';
-                if (d.type === 'post') {
-                    content = `<h4>${escapeHtml(d.title)}</h4><p>${escapeHtml(d.content)}</p><div style="margin-top:8px; font-size: 0.7rem; color: var(--accent);">${formatDate(d.date)}</div>`;
-                } else {
-                    content = `<h4>#${escapeHtml(d.name)}</h4><p>${d.val} linked brain updates</p>`;
-                }
-                tooltip.innerHTML = content;
-            })
-            .on('mousemove', (event) => {
-                tooltip.style.left = (event.clientX + 20) + 'px';
-                tooltip.style.top = (event.clientY + 20) + 'px';
-            })
-            .on('mouseleave', () => {
-                tooltip.style.opacity = '0';
-                setTimeout(() => { if(tooltip.style.opacity === '0') tooltip.style.display = 'none'; }, 200);
-            })
-            .on('click', (event, d) => {
-                if (d.type === 'post') {
-                    const postId = d.idNum || parseInt(d.id.split('-')[1]);
-                    openBUInline(postId);
-                } else if (d.type === 'topic') {
-                    showTopicBUs(d.name);
-                }
-            });
-
-        node.append('circle')
-            .attr('r', d => d.type === 'post' ? 4 : radiusScale(d.val))
-            .attr('fill', d => d.type === 'post' ? '#bbbbbb' : 'transparent')
-            .attr('stroke', d => d.type === 'post' ? '#aaaaaa' : 'var(--accent)')
-            .attr('stroke-width', d => d.type === 'post' ? 1 : 1.5)
-            .attr('fill-opacity', d => d.type === 'post' ? 0.7 : 0);
-
-        node.append('text')
-            .text(d => d.type === 'post' ? '' : d.name)
-            .attr('dy', d => radiusScale(d.val) + 16)
-            .attr('text-anchor', 'middle')
-            .attr('fill', 'var(--accent)')
-            .attr('font-family', 'JetBrains Mono, monospace')
-            .attr('font-size', d => d.type === 'post' ? '0px' : fontSize)
-            .attr('letter-spacing', '0.5px');
-
-        simulation.on('tick', () => {
-            link
-                .attr('x1', d => d.source.x)
-                .attr('y1', d => d.source.y)
-                .attr('x2', d => d.target.x)
-                .attr('y2', d => d.target.y);
-            node.attr('transform', d => {
-                d.x = Math.max(40, Math.min(width - 40, d.x));
-                d.y = Math.max(40, Math.min(height - 40, d.y));
-                return `translate(${d.x},${d.y})`;
-            });
-        });
-
-        node.call(d3.drag()
-            .on('start', (event, d) => {
-                if (!event.active) simulation.alphaTarget(0.3).restart();
-                d.fx = d.x; d.fy = d.y;
-            })
-            .on('drag', (event, d) => {
-                d.fx = event.x; d.fy = event.y;
-            })
-            .on('end', (event, d) => {
-                if (!event.active) simulation.alphaTarget(0);
-                d.fx = null; d.fy = null;
-            })
-        );
-    }
-
-    function renderKGraph(updates) {
-        kgraphData = buildGraphData(updates);
-        if (kgraphData.nodes.length === 0) return;
-
-        const container = document.getElementById('kgraph');
-        const width = container.clientWidth || 400;
-        const height = container.clientHeight || 280;
-        drawGraph('kgraph', width, height, kgraphData);
-
-        // Click to open full-scale
-        container.addEventListener('click', openKGraph);
-    }
-
-    function openKGraph() {
-        if (!kgraphData || kgraphData.nodes.length === 0) return;
-        const overlay = document.getElementById('kgraphOverlay');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        drawGraph('kgraphFull', w, h, kgraphData, {
-            nodeRange: [8, 40],
-            fontSize: '13px',
-            distance: 180,
-            charge: -600
-        });
-    }
-
-    function openBUInline(updateId) {
-        // Search in all available updates
-        const sourceUpdates = window.graphUpdates || allUpdates;
-        const update = sourceUpdates.find(u => u.id === updateId);
-        if (!update) return;
-
-        const overlay = document.getElementById('fileOverlay');
-        const title = document.getElementById('fileOverlayTitle');
-        const body = document.getElementById('fileOverlayBody');
-        const vaultSlug = (vault && vault.slug) ? vault.slug : 'jyk';
-
-        title.textContent = update.title;
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-
-        const processed = resolveWikiLinks(resolveWikiImages(update.content));
-        const topicsHtml = update.topics?.length
-            ? `<div class="topics" style="margin-bottom: 24px;">${update.topics.map(t => `<span class="topic-badge">${t.name}</span>`).join('')}</div>`
-            : '';
-        const metaHtml = `<div class="update-meta" style="margin-bottom: 8px;"><span>${formatDate(update.createdAt)}</span></div>`;
-
-        body.innerHTML = `
-            ${metaHtml}
-            ${topicsHtml}
-            <div class="update-full">${marked.parse(processed)}</div>
-            <div style="margin-top: 48px; border-top: 1px solid var(--grey-800); padding-top: 24px;">
-                <a href="https://www.gobispace.com/@${vaultSlug}?postId=${update.id}" target="_blank" class="btn outline" style="font-size: 0.8rem;">View on GobiSpace 🔗</a>
-            </div>
-        `;
-    }
-
-    function showTopicBUs(topicName) {
-        // Use graphUpdates which contains more posts than allUpdates
-        const sourceUpdates = window.graphUpdates || allUpdates;
-        const linkedUpdates = sourceUpdates.filter(u =>
-            (u.topics || []).some(t => t.name === topicName)
-        );
-
-        if (linkedUpdates.length === 0) return;
-
-        const overlay = document.getElementById('fileOverlay');
-        const title = document.getElementById('fileOverlayTitle');
-        const body = document.getElementById('fileOverlayBody');
-        const vaultSlug = (vault && vault.slug) ? vault.slug : 'jyk';
-
-        title.textContent = `#${topicName}`;
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-
-        const listHtml = linkedUpdates.map(u => `
-            <div style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--grey-800);">
-                <h3 style="margin-top: 0; margin-bottom: 8px;">
-                    <a href="#" onclick="event.preventDefault(); openBUInline(${u.id})" style="text-decoration: none; color: var(--fg);">
-                        ${escapeHtml(u.title)}
-                    </a>
-                    <a href="https://www.gobispace.com/@${vaultSlug}?postId=${u.id}" target="_blank" rel="noopener" onclick="event.stopPropagation();" style="text-decoration: none;">
-                        <span style="font-size: 0.8rem; color: var(--accent); vertical-align: middle; margin-left: 8px;">🔗</span>
-                    </a>
-                </h3>
-                <div style="font-size: 0.85rem; color: var(--grey-500); margin-bottom: 12px;">${formatDate(u.createdAt)}</div>
-                <div style="font-size: 0.95rem; color: var(--grey-500); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer;" onclick="openBUInline(${u.id})">
-                    ${escapeHtml(u.content.substring(0, 200))}...
-                </div>
-            </div>
-        `).join('');
-
-        body.innerHTML = `
-            <div style="padding-top: 12px;">
-                <p style="color: var(--grey-500); margin-bottom: 32px; font-family: 'JetBrains Mono', monospace;">Found ${linkedUpdates.length} brain updates linked to this topic.</p>
-                ${listHtml}
-            </div>
-        `;
-    }
-
-    function closeKGraph() {
-        const overlay = document.getElementById('kgraphOverlay');
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
-        document.getElementById('kgraphFull').innerHTML = '';
+        return String(text).replace(/[&<>"']/g, m => map[m]);
     }
 
     // File Viewer
@@ -1707,13 +924,11 @@
         const title = document.getElementById('fileOverlayTitle');
         const body = document.getElementById('fileOverlayBody');
 
-        // Normalize path: strip query params and ensure extension
-        // Also handle encoded paths coming from standard markdown links
         let cleanPath = decodeURIComponent(filePath.split('?')[0].split('&')[0].trim());
         if (!cleanPath.includes('.') && !cleanPath.endsWith('/')) cleanPath += '.md';
 
         title.textContent = label;
-        body.innerHTML = '<div class="file-overlay-loading"><div class="loading"></div> Loading...</div>';
+        body.innerHTML = '<div class="file-overlay-loading"><div class="loading"></div> Loading…</div>';
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
 
@@ -1726,12 +941,10 @@
                 return;
             }
 
-            // Default: Read as markdown
-            body.style.padding = '0 32px 48px';
+            body.style.padding = '16px 48px 64px';
             body.style.overflowY = 'auto';
 
             const content = await gobi.readFile(cleanPath);
-            // Strip YAML frontmatter
             const stripped = content.replace(/^---\n[\s\S]*?\n---\n*/, '');
             const processed = resolveWikiLinks(resolveWikiImages(stripped));
             body.innerHTML = marked.parse(processed);
@@ -1747,20 +960,14 @@
         document.getElementById('fileOverlayBody').innerHTML = '';
     }
 
-    // ESC key to close overlays
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeKGraph();
-            closeFileViewer();
-        }
+        if (e.key === 'Escape') closeFileViewer();
     });
 
-    // Click backdrop to close file viewer
     document.getElementById('fileOverlay').addEventListener('click', (e) => {
         if (e.target === document.getElementById('fileOverlay')) closeFileViewer();
     });
 
-    // Start when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
