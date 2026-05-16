@@ -32,6 +32,7 @@ NEVER proactively create documentation or README files.
 - Skills can be found in `.claude/skills`
 - Templates (of md docs) in `_Settings_/Templates`
 - Knowledge Tasks in `_Settings_/Tasks` (only when requested)
+- Cross-cutting know-how (cookbooks, trial-and-error logs) in `_Settings_/Notes/` — read BEFORE related work, append AFTER discoveries
 - Each command can be called using abbreviations
 - Check this first for new command (especially if it's abbreviations)
 
@@ -70,7 +71,9 @@ Ingest/         → Articles/
   - `Ingest/Clippings/` — web clippings, transcripts, captures (CAE enriches these)
   - `Ingest/Research/` — research briefings and reference material (DRB writes here)
 - **`Articles/`** — user-authored content where the user infuses their own thinking with ingested data. Authored by the user, often through dialogue with a deep-thinking agent.
-- **`Events/`** — events reference data (conferences, meetups, talks, etc.). One folder per event (e.g. `Events/YYYY-MM-DD Event Name/`) with `event.md` and optional `Sessions/` subfolder.
+- **`Context/`** — user-context reference data: events (conferences, meetups, talks), interests, profile-adjacent metadata. Read/written by onboarding and research flows.
+  - `Context/interest.md` — user's interest list (consulted by DRB, CAE TOPIC mode, DTA seed selection; written/updated by onboarding)
+  - `Context/YYYY-MM-DD Event Name/` — one folder per event with `event.md` + flat session files (no `Sessions/` subfolder)
 - **`AI/`** — agent workspace for machine-generated intermediate outputs (gitignored, not part of the user-visible flow).
 
 ## Search over files
@@ -154,6 +157,26 @@ tags:
 ### Language Preferences
 - Use the `primaryLanguage` from `.gobi/settings.yaml` as the default language for all output (English is fine, say, to quote original note)
 - For voice/conversation: match the user's spoken language; fall back to `primaryLanguage` if ambiguous
+
+### User Clarification — Structured Choice over Open Questions
+
+When you need user input on a decision with **2-4 discrete options** that meaningfully change your next action, present them as a **structured choice**, not an open question. Reduces back-and-forth, surfaces options the user might not know exist, and produces a cleaner decision trail.
+
+**Tool / rendering by environment**:
+- **Claude Code / chat**: use the `AskUserQuestion` tool — renders as clickable options with descriptions. Mark the best pick with `(Recommended)` and put it first.
+- **Voice (RVA, DTA via voice)**: verbalize as numbered or labeled options.
+  > "두 가지 방법이 있어요. 첫째, 새 글로 쓰기. 둘째, 기존 글에 이어 붙이기. 어느 쪽이 끌리세요?"
+
+**When to use**:
+- ✅ Options are mutually exclusive and the choice branches your next step
+- ✅ User might not realize all options exist
+- ✅ Multiple candidate files/sources/titles found and you need to pick one
+
+**When NOT to use**:
+- ❌ Simple yes/no — just ask "할까요?"
+- ❌ Open exploration is the goal (e.g. DTA SURFACE step — leave the question open)
+- ❌ 5+ options — narrow down first, then offer choice
+- ❌ The "right" answer is obvious from context — just do it
 
 ### 🔗 Critical: Wiki Links Must Be Valid
 - **All wiki links must point to existing files**

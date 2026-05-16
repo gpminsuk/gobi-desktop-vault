@@ -36,6 +36,8 @@ Scan `Articles/` folder for recently modified files (last 7 days):
 find Articles/ -name "*.md" -mtime -7 | sort -t/ -k2
 ```
 
+Also consult `Context/interest.md` — pull from "주요 관심 분야" and "현재 학습 중" sections. These are the user's stable interests, complementing the recency signal from Articles/.
+
 **Selection criteria:**
 1. Sort by modification date (most recent first)
 2. Select up to 5 topics

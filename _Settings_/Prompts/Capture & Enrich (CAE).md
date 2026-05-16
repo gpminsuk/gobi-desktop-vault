@@ -31,7 +31,8 @@ tags:
 
 2. **정리본 (Enriched)**: `AI/Clippings/YYYY-MM-DD [<title>] by CAE.md`
    - frontmatter: 위 + `clippings: "[[Ingest/Clippings/<원본 파일명>]]"`, `status: processed`
-   - 본문: `## Summary` → `## Improve Capture & Transcript (ICT)` → `## 관련` 순
+   - 본문: `## Summary` → `## 출처 / Source` → `## Improve Capture & Transcript (ICT)` → `## 관련` 순
+   - `## 출처 / Source` 섹션은 본문에서도 출처 추적이 가능하도록 URL/Fetched 시각/Method/Notes를 명시 ([[../Notes/Fetching Cookbook#출처 기록 규칙]] 참조)
 
 ## Main Process
 
@@ -40,8 +41,19 @@ tags:
    - URL 패턴 (http://, https://) 이면 → 2단계 (FETCH)
    - 긴 텍스트가 직접 주어졌으면 → 5단계 (SAVE RAW)
    - 짧은 주제 문구면 → 3단계 (RESEARCH)
+   - **모호하면 AskUserQuestion**: 예 "Claude Code" 같은 입력은 RAW일 수도
+     TOPIC일 수도 있음. 옵션 제시:
+     · 이미 가지고 있는 텍스트 정리 (RAW)
+     · 웹에서 찾아서 정리 (TOPIC, Recommended)
+     · 특정 URL 알려줄게요 (URL)
+     (CLAUDE.md § User Clarification 참조)
 
-2. FETCH (URL 모드) — 가벼운 방법부터 캐스케이드
+2. FETCH (URL 모드) — 쿡북 먼저, 그다음 가벼운 방법부터 캐스케이드
+
+   0. **쿡북 확인 (필수)**: [[../Notes/Fetching Cookbook]]에서 대상 도메인의
+      레시피가 있는지 확인. 있으면 해당 방법만 시도하고, ❌ 기록된 방법은
+      건너뛴다. 없으면 a부터 순서대로:
+
    a. WebFetch — 가장 빠름, 많은 사이트에서 성공
    b. 실패 시 curl + User-Agent 위장:
       curl -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) \
@@ -50,15 +62,31 @@ tags:
       → 나무위키 등 단순 헤더 체크 403 우회
    c. 그래도 실패 — Referer/Cookie 추가, HTTP/1.1 강제:
       curl -A "…" -e "https://www.google.com/" --http1.1 -L <URL>
-   d. 마지막 수단 — Playwright/headless 브라우저
+   d. JS 렌더링 의심 — RSS/sitemap/archive.org 우회 시도
+      (쿡북의 "공통 패턴 → 3. Cloudflare / JS 렌더링" 참조)
+   e. Playwright/headless 브라우저
       먼저 사용자에게 알리고 동의 받기:
       "브라우저 엔진(Chromium) 설치가 필요해요. 용량이 크고 시간이
        걸려요. 진행할까요?"
+   f. **마지막 수단 — 서브에이전트 escalate**:
+      Task 도구로 general-purpose 서브에이전트 호출:
+      "Find <URL> by any means. Try alternative sources, archive,
+       RSS, official API. Return content + method that worked.
+       Under 500 words."
+      서브에이전트가 찾은 방법은 9단계에서 쿡북에 기록.
 
 3. RESEARCH (TOPIC 모드)
+   - **주제가 모호하면** (예: "AI", "PKM"처럼 너무 광범위):
+     `Context/interest.md`의 "주요 관심 분야"·"현재 학습 중"을 읽어
+     사용자의 맥락으로 키워드 구체화 (예: "AI" + 사용자의 "AI agent
+     workflow" 관심 → "AI agent workflow 2026").
+     여전히 모호하면 AskUserQuestion으로 좁히기.
    - WebSearch로 상위 결과 3-5개 수집
-   - 각 결과를 2단계 캐스케이드로 FETCH
-   - 중복 제거, 정보량 많은 1-2개 선정 → 4단계로
+   - 각 결과 제목·출처·짧은 설명을 사용자에게 AskUserQuestion으로 제시:
+     "정리하실 자료를 골라주세요" (multiSelect: true 허용)
+     · 가장 권위/정보량 많아 보이는 항목 첫 줄에 (Recommended)
+     · 선택된 항목만 2단계 캐스케이드로 FETCH
+   - 사용자 선택이 없거나 자동 진행 요청 시: top 1-2를 자동 선정 → 4단계로
 
 4. PARSE (HTML → 텍스트)
    - 간단한 경우: pandoc, grep, sed
@@ -95,6 +123,12 @@ tags:
      ## Summary
      <캐치 요약>
 
+     ## 출처 / Source
+     - URL: <source URL>
+     - Fetched: YYYY-MM-DD HH:MM:SS
+     - Method: <WebFetch | curl+UA | curl+Referer | RSS | archive.org | Playwright | subagent>
+     - Notes: <quirks, blocks encountered, workaround used>
+
      ## Improve Capture & Transcript (ICT)
      ### 챕터 1
      <정리된 본문>
@@ -102,6 +136,15 @@ tags:
 
      ## 관련
      - [[관련 Article]]
+
+8. UPDATE COOKBOOK (조건부)
+   다음 중 하나에 해당하면 [[../Notes/Fetching Cookbook]]에 항목 추가/갱신:
+   - 새로운 도메인을 다뤘다 (성공/실패 무관, 다음 사람이 시간 아낄 수 있게)
+   - 기존 도메인의 레시피가 더 이상 안 통한다 (갱신)
+   - 서브에이전트가 새 우회 방법을 찾았다
+   - 캐스케이드가 모두 실패했다 ("알려진 어려운 도메인" 표에 추가)
+
+   포맷은 쿡북의 "사용 규칙" 참조.
 ```
 
 ## Caveats
@@ -125,16 +168,21 @@ tags:
    - 길이는 원본과 비슷 (잘려서 30-50% 짧으면 안 됨)
 5. 완료 불가능 시: status를 `NEEDS_INPUT`으로, 사유 명시. PROCESSED 거짓 표시 절대 금지.
 
-### Fetch 캐스케이드 — 가벼운 것부터
+### Fetch 캐스케이드 — 쿡북 먼저, 가벼운 것부터
 
 비용/시간 순서를 지킨다:
+
+0. [[../Notes/Fetching Cookbook]] 확인 (즉시, 무료, 과거 노하우 재활용)
 1. WebFetch (즉시, 무료)
 2. curl + UA 위장 (즉시, 무료, 대부분의 차단 우회)
 3. curl + UA + Referer + HTTP/1.1 (즉시, 무료)
-4. Playwright/headless 브라우저 (느림, 설치 필요, **사용자 동의 필수**)
+4. RSS/sitemap/archive.org 우회 (즉시, 무료)
+5. Playwright/headless 브라우저 (느림, 설치 필요, **사용자 동의 필수**)
+6. 서브에이전트 escalate (Task 도구, 시간 소요, 새 방법 발견 가능)
 
-3단계까지 실패하고 4단계로 가기 전 반드시 사용자에게 물어본다:
-"브라우저 엔진 설치가 필요해요. 진행할까요?" — 동의 없이 무거운 도구 자동 실행 금지.
+5단계로 가기 전 반드시 사용자에게 물어본다: "브라우저 엔진 설치가 필요해요. 진행할까요?" — 동의 없이 무거운 도구 자동 실행 금지.
+
+성공/실패 모두 쿡북에 기록 (Main Process § 8 UPDATE COOKBOOK).
 
 ### Fetching 윤리
 

@@ -37,7 +37,7 @@ tags:
 
 ## 주요 세션
 
-- [[Sessions/강민석 - Gobi Desktop 뽀개기]] — 14:40–16:10, Room 441
+- [[강민석 - Gobi Desktop 뽀개기]] — 14:40–16:10, Room 441
 
 ## 참고
 

@@ -7,7 +7,7 @@ date: 2026-05-16
 time: "14:40–16:10"
 duration_minutes: 90
 location: "Seattle University, Bannan Building, Room 441"
-event: "[[../event]]"
+event: "[[event]]"
 source: https://www.changbal.org/event-info/changbal-dev-conference
 created: 2026-05-15 15:42:22
 tags:
@@ -42,5 +42,5 @@ AI 에이전트와 시맨틱 워크플로우를 활용해 개인 지식관리 �
 
 ## 관련
 
-- 컨퍼런스: [[../event]]
+- 컨퍼런스: [[event]]
 - 공식 페이지: <https://www.changbal.org/event-info/changbal-dev-conference>
