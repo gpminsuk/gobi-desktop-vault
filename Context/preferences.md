@@ -32,7 +32,7 @@ tags:
 ## 언어 / 톤 (Language & Tone)
 
 - **주 언어**: `.gobi/settings.yaml`의 `primaryLanguage` 따름 (현재: ko)
-- **존댓말 / 반말**: 존댓말 | 반말 — _기본: 존댓말_
+- **존댓말 / 반말**: 존댓말 (기본값 고정. 반말은 사용자가 명시적으로 요청할 때만 전환)
 - **격식**: casual | professional | balanced — _기본: balanced_
 
 ## 소스 선호 (Source Preferences)

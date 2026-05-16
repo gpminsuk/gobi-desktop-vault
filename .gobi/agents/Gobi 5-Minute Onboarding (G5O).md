@@ -1,7 +1,7 @@
 ---
 name: Gobi 5-Minute Onboarding (G5O)
 description: 10분 내외의 경량 온보딩. 관심사와 선호를 수집해 Context/interests.md와 Context/preferences.md의 핵심 섹션을 채운다.
-version: 1.4.0
+version: 1.5.0
 created: 2026-05-16
 ---
 사용자가 고비 데스크탑을 처음 체험할 때, "경험을 기반으로 내 생각과 관점을 기록하여 AI의 결과가 나만의 것이 되도록 만든다"는 가치를 경험하게 한다.
@@ -23,11 +23,10 @@ created: 2026-05-16
 2b. 그 주제에서 아직 풀리지 않은 질문을 듣는다.
 3. 부수 관심사를 가볍게 확인한다 (없으면 넘어간다).
 4. 선호/비선호 기준 후보 4개를 `AskUserQuestion`으로 제시하고 사용자가 고르게 한다.
-5. 콘텐츠 스타일 선호를 `AskUserQuestion`으로 확인한다.
+5. 글쓰기 스타일 선호를 `AskUserQuestion`으로 확인한다.
 6. 소스 유형 선호를 `AskUserQuestion`으로 확인한다.
-7. 대화 톤을 `AskUserQuestion`으로 확인한다.
-8. 수집한 내용을 보편화하여 `Context/interests.md`, `Context/preferences.md`에 업데이트한다.
-9. 저장된 관심사와 선호가 앞으로 고비의 답변과 리서치에 반영된다고 짧게 설명한다.
+7. 수집한 내용을 보편화하여 `Context/interests.md`, `Context/preferences.md`에 업데이트한다.
+8. 저장된 관심사와 선호가 앞으로 고비의 답변과 리서치에 반영된다고 짧게 설명한다.
 
 ## 하지 말 것
 
@@ -148,22 +147,7 @@ Step 4가 끝나면 아래 문장으로 자연스럽게 전환한다.
 
 결과를 `소스 선호 (Source Preferences)`의 `선호 소스 유형` 항목에 반영한다.
 
-### 7. 대화 톤
-
-`AskUserQuestion` 도구로 대화 방식 선호를 확인한다.
-
-도구 호출 형식:
-
-- `question`: "어떻게 말 걸어드릴까요?"
-- `header`: "대화 톤"
-- `multiSelect`: false
-- 옵션:
-  - label: "존댓말로 편하게", description: "정중하고 자연스러운 존댓말 (Recommended)"
-  - label: "반말로 편하게", description: "친근한 반말, 격식 없이"
-
-결과를 `언어 / 톤 (Language & Tone)`의 `존댓말 / 반말` 항목에 반영한다.
-
-### 8. Context 업데이트
+### 7. Context 업데이트
 
 답변이 모이면 `Context/interests.md`와 `Context/preferences.md`를 업데이트한다. 파일이 없으면 아래 섹션 구조로 새로 생성한다.
 
@@ -193,7 +177,6 @@ Step 4가 끝나면 아래 문장으로 자연스럽게 전환한다.
 | 선호/비선호 기준 | `## 선호 / 비선호 기준 (Preference Criteria)` (없으면 추가) |
 | 글쓰기 스타일 | `## 글쓰기 스타일 (Writing Style)` (없으면 추가) |
 | 소스 유형 | `## 소스 선호 (Source Preferences)`의 `선호 소스 유형` 항목 교체 |
-| 대화 톤 | `## 언어 / 톤 (Language & Tone)`의 `존댓말 / 반말` 항목 교체 |
 
 `Preference Criteria` 섹션이 없으면 아래 형식으로 추가한다.
 
@@ -225,7 +208,7 @@ Step 4가 끝나면 아래 문장으로 자연스럽게 전환한다.
 
 > "관심사: [보편화된 관심사 한 줄]
 > 선호 기준: [보편화된 기준 한 줄]
-> 스타일: [응답 형식] / [소스 유형] / [톤]"
+> 스타일: [글쓰기 스타일] / [소스 유형]"
 
 ## 시간 관리
 
@@ -246,7 +229,6 @@ Step 4가 끝나면 아래 문장으로 자연스럽게 전환한다.
 - 선호 기준: 안전을 돕되 아이의 자율성과 가족 관계를 해치지 않는 것
 - 글쓰기 스타일: 경험과 맥락을 담은 글
 - 소스 선호: 블로그/개인 아티클, 커뮤니티 토론
-- 톤: 존댓말
 
 ### `Context/interests.md` 예시
 
