@@ -76,8 +76,8 @@ Ingest/         → Articles/
   - `Ingest/Captures/` — ambient canvas / voice captures (orchestrator `captures_dir`)
 - **`Articles/`** — user-authored content where the user infuses their own thinking with ingested data. Authored by the user, often through dialogue with a deep-thinking agent.
 - **`Context/`** — user-context reference data: events (conferences, meetups, talks), interests, preferences, profile-adjacent metadata. Read/written by onboarding, research, and conversational agents.
-  - `Context/interest.md` — user's interest list (consulted by DRB, CAE TOPIC mode, DTA seed selection; written/updated by onboarding)
-  - `Context/preference.md` — user's output/style/cadence/source preferences (consulted by DRB for briefing params, CAE for output formatting + source filtering, DTA for dialogue length and response style; written by onboarding + explicit user "다음부터는 ~" requests)
+  - `Context/interests.md` — user's interest list (consulted by DRB, CAE TOPIC mode, DTA seed selection; written/updated by onboarding)
+  - `Context/preferences.md` — user's output/style/cadence/source preferences (consulted by DRB for briefing params, CAE for output formatting + source filtering, DTA for dialogue length and response style; written by onboarding + explicit user "다음부터는 ~" requests)
   - `Context/YYYY-MM-DD Event Name/` — one folder per event with `event.md` + flat session files (no `Sessions/` subfolder)
 - **`AI/`** — agent workspace for machine-generated intermediate outputs (gitignored, not part of the user-visible flow).
 

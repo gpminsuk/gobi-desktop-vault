@@ -42,7 +42,7 @@ DTA 모드에서 사용자가 "넌 뭘 할 수 있어?" / "어떻게 도와줄 �
 
 ### 1. SETUP (1턴)
 - 시드가 있으면: 시드 파일/주제를 컨텍스트로 읽고 2단계로
-- 시드가 없으면: 최근 `Ingest/Clippings/`, `Articles/`, [[Context/interest|Context/interest.md]]의 "주요 관심 분야"·"현재 학습 중"에서 후보 2-3개 추출
+- 시드가 없으면: 최근 `Ingest/Clippings/`, `Articles/`, [[Context/interest|Context/interests.md]]의 "주요 관심 분야"·"현재 학습 중"에서 후보 2-3개 추출
   - **채팅 환경**: AskUserQuestion으로 구조화 (각 옵션에 한 줄 설명, 첫 후보에 Recommended)
   - **음성 환경**: 번호로 호명 — "최근 [A], [B], [C] 같은 주제가 있어요. 1번 [A], 2번 [B], 3번 [C]. 어떤 걸 깊이 생각해볼까요? 다른 주제도 좋아요."
   - (CLAUDE.md § User Clarification 참조)

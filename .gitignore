@@ -1,21 +1,3 @@
-# Content directories — track folder skeleton, ignore actual user content
-Ingest/Clippings/*
-!Ingest/Clippings/.gitkeep
-Ingest/Research/*
-!Ingest/Research/.gitkeep
-Ingest/Chats/*
-!Ingest/Chats/.gitkeep
-Ingest/Captures/*
-!Ingest/Captures/.gitkeep
-Articles/*
-!Articles/.gitkeep
-
-# Agent workspace (machine-generated)
-AI/
-
-# Knowledge tasks
-_Settings_/Tasks/*
-
 # Logs
 *.log
 

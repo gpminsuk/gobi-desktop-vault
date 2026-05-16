@@ -1,7 +1,6 @@
 ---
 name: writeup
 description: Draft an artifact from recent conversation history (DTA dialogue, brainstorming, casual chat). Presents 2-4 draft variations via AskUserQuestion, then asks whether to save to Articles/, post to gobi space (BU + thread), or both. Default mode requires approval; pass `bypass` to auto-pick the highest-confidence draft and apply Recommended destinations.
-argument-hint: "[approval|bypass]"
 disable-model-invocation: true
 ---
 
@@ -114,7 +113,7 @@ options:
 - DTA에서 넘어왔다면 DTA 세션에서 다뤄진 seed 파일도 링크.
 
 ### 언어 / 톤
-- `Context/preference.md`의 "언어 / 톤"과 "콘텐츠 형식" 따른다.
+- `Context/preferences.md`의 "언어 / 톤"과 "콘텐츠 형식" 따른다.
 - 미설정 시 `.gobi/settings.yaml`의 `primaryLanguage` (현재: ko).
 
 ### Bypass 안전장치

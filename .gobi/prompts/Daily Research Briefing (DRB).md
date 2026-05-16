@@ -18,9 +18,9 @@ Generate a daily briefing on topics you're actively researching, based on your r
 ## Input
 
 - `Articles/` folder (auto-detect recently modified files) — recency signal
-- `Context/interest.md` — user's stable interest list ("주요 관심 분야", "현재 학습 중", "관심 해제")
-- `Context/preference.md` — runtime overrides for max_topics, search depth, source filters, language/tone, summary length
-- Maximum N topics per run (N = preference.md `DRB 토픽 수`, default 5)
+- `Context/interests.md` — user's stable interest list ("주요 관심 분야", "현재 학습 중", "관심 해제")
+- `Context/preferences.md` — runtime overrides for max_topics, search depth, source filters, language/tone, summary length
+- Maximum N topics per run (N = preferences.md `DRB 토픽 수`, default 5)
 
 ## Output
 
@@ -31,7 +31,7 @@ Generate a daily briefing on topics you're actively researching, based on your r
 
 ### Step 0: Read Preferences
 
-Before running, read `Context/preference.md` for runtime overrides. The file may not exist or sections may be empty — in that case, fall back to defaults in the `agent_params` block at the bottom of this file.
+Before running, read `Context/preferences.md` for runtime overrides. The file may not exist or sections may be empty — in that case, fall back to defaults in the `agent_params` block at the bottom of this file.
 
 | Preference section | Used for |
 |--------------------|----------|
@@ -51,11 +51,11 @@ Merge **two signals** to produce the topic candidate list:
 
 **Signal A — Recency (Articles/)**:
 ```bash
-# Find recently modified articles (lookback_days from preference.md, default 7)
+# Find recently modified articles (lookback_days from preferences.md, default 7)
 find Articles/ -name "*.md" -mtime -7 | sort -t/ -k2
 ```
 
-**Signal B — Stable interests (`Context/interest.md`)**:
+**Signal B — Stable interests (`Context/interests.md`)**:
 - Read the file and extract entries from:
   - "주요 관심 분야" → high-priority candidates
   - "현재 학습 중" → high-priority candidates (the user is actively learning these — fresh updates matter)
@@ -66,8 +66,8 @@ find Articles/ -name "*.md" -mtime -7 | sort -t/ -k2
 1. Pool candidates from both signals
 2. Deduplicate by topic name (case-insensitive, fuzzy match — e.g. "LLM evaluation" and "LLM Eval" merge)
 3. Sort: items appearing in BOTH signals first (highest signal), then Signal B "주요"/"현재 학습 중", then Signal A by recency, then Signal B "부수"
-4. Cap at `max_topics` (from preference.md, default 5)
-5. For each selected topic, extract topic name + key subtopics (from Articles H2/H3 if present, otherwise infer from interest.md context)
+4. Cap at `max_topics` (from preferences.md, default 5)
+5. For each selected topic, extract topic name + key subtopics (from Articles H2/H3 if present, otherwise infer from interests.md context)
 
 This ensures DRB covers what you've actively been writing AND what you stably care about, even if you haven't written about it recently.
 
@@ -118,7 +118,7 @@ For each topic, select top 2-3 most relevant results:
 | Medium | Tutorial updates, tool releases |
 | Low | General articles, opinion pieces |
 
-**Apply preference.md filters** (Step 0): boost domains from "선호 도메인" to High; drop any URL whose domain matches "회피 도메인".
+**Apply preferences.md filters** (Step 0): boost domains from "선호 도메인" to High; drop any URL whose domain matches "회피 도메인".
 
 ### Step 5: Deep Fetch Key Content (Optional)
 
