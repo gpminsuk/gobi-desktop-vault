@@ -27,6 +27,22 @@ Generate a daily briefing on topics you're actively researching, based on your r
 
 ## Workflow
 
+### Step 0: Read Preferences
+
+Before running, read `Context/preference.md` for runtime overrides. The file may not exist or sections may be empty — in that case, fall back to defaults in the `agent_params` block at the bottom of this file.
+
+| Preference section | Used for |
+|--------------------|----------|
+| 알림 / 빈도 → DRB 토픽 수 | overrides `max_topics` |
+| 알림 / 빈도 → DRB 검색 깊이 | overrides `search_depth` (standard / deep) |
+| 알림 / 빈도 → DRB lookback | overrides `lookback_days` |
+| 알림 / 빈도 → DRB 음성 요약 포함 | overrides `include_voice` |
+| 소스 선호 → 선호 도메인 | boost in result ranking (Step 4) |
+| 소스 선호 → 회피 도메인 | filter out of results (Step 4) |
+| 소스 선호 → 선호 소스 유형 | bias search query phrasing (Step 3) |
+| 언어 / 톤 | applied to summary phrasing (Step 6) |
+| 콘텐츠 형식 → 응답 길이 | adjusts per-topic summary length (Step 6) |
+
 ### Step 1: Identify Active Topics
 
 Scan `Articles/` folder for recently modified files (last 7 days):
@@ -89,6 +105,8 @@ For each topic, select top 2-3 most relevant results:
 | High | New research papers, breaking news |
 | Medium | Tutorial updates, tool releases |
 | Low | General articles, opinion pieces |
+
+**Apply preference.md filters** (Step 0): boost domains from "선호 도메인" to High; drop any URL whose domain matches "회피 도메인".
 
 ### Step 5: Deep Fetch Key Content (Optional)
 
