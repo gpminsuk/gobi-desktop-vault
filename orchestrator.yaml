@@ -6,6 +6,7 @@ orchestrator:
   logs_dir: .gobi/logs
   prompts_dir: .gobi/prompts
   tasks_dir: .gobi/tasks
+  agents_dir: .claude/agents
   max_concurrent: 3
   poll_interval: 1
   file_extensions:
