@@ -70,6 +70,8 @@ Ingest/         → Articles/
 - **`Ingest/`** — raw data collected from outside sources
   - `Ingest/Clippings/` — web clippings, transcripts, captures (CAE enriches these)
   - `Ingest/Research/` — research briefings and reference material (DRB writes here)
+  - `Ingest/Chats/` — chat session history (orchestrator `chat_history_dir`)
+  - `Ingest/Captures/` — ambient canvas / voice captures (orchestrator `captures_dir`)
 - **`Articles/`** — user-authored content where the user infuses their own thinking with ingested data. Authored by the user, often through dialogue with a deep-thinking agent.
 - **`Context/`** — user-context reference data: events (conferences, meetups, talks), interests, preferences, profile-adjacent metadata. Read/written by onboarding, research, and conversational agents.
   - `Context/interest.md` — user's interest list (consulted by DRB, CAE TOPIC mode, DTA seed selection; written/updated by onboarding)

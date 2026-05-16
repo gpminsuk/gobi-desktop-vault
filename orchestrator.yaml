@@ -3,7 +3,7 @@ orchestrator:
   prompts_dir: _Settings_/Prompts
   tasks_dir: _Settings_/Tasks
   logs_dir: _Settings_/Logs
-  chat_history_dir: _Settings_/Chats
+  chat_history_dir: Ingest/Chats
   skills_dir: .claude/skills
   max_concurrent: 3
   poll_interval: 1
@@ -14,7 +14,7 @@ orchestrator:
     - .doc
     - .txt
     - .epub
-  captures_dir: _Settings_/History/Capture
+  captures_dir: Ingest/Captures
   capture_prompt_path: _Settings_/Prompts/Ambient Canvas Brainstorming (ACB).md
 defaults:
   executor: claude_code

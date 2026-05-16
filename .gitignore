@@ -3,6 +3,10 @@ Ingest/Clippings/*
 !Ingest/Clippings/.gitkeep
 Ingest/Research/*
 !Ingest/Research/.gitkeep
+Ingest/Chats/*
+!Ingest/Chats/.gitkeep
+Ingest/Captures/*
+!Ingest/Captures/.gitkeep
 Articles/*
 !Articles/.gitkeep
 
