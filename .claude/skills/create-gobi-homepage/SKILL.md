@@ -46,7 +46,7 @@ Regenerate after editing any template: `python examples/_render_screenshots.py` 
 ## Output
 
 - A single self-contained HTML file at the output path. All CSS/JS inline. CDN dependencies allowed for fonts, marked, d3 only.
-- Append a row to `_Settings_/Logs/skill_usage_logs.md`: `| YYYY-MM-DD | HH:MM | create-gobi-homepage | <style> + <features> |`.
+- Append a row to `.gobi/logs/skill_usage_logs.md`: `| YYYY-MM-DD | HH:MM | create-gobi-homepage | <style> + <features> |`.
 
 ## Interview
 
@@ -214,7 +214,6 @@ If the user picks `custom-blend`:
 ## Related skills / docs
 
 - `gobi:gobi-homepage` — gobi-cli's own homepage skill (harness user-invocable); canonical source of the `window.gobi.*` API. Consult it if this skill's API table looks drifted.
-- `_Settings_/Prompts/Create Brain Homepage (CBH).md` — legacy single-shot prompt; now a pointer to this skill.
 
 ## When NOT to use
 

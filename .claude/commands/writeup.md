@@ -1,6 +1,6 @@
 ---
 name: writeup
-description: Draft an artifact from recent conversation history (DTA dialogue, brainstorming, casual chat). Presents 2-4 draft variations via AskUserQuestion, then asks whether to save to Articles/, post to gobi space (BU + thread), or both. Default mode requires approval; pass `bypass` to auto-pick the highest-confidence draft and apply Recommended destinations.
+description: Draft an artifact from recent conversation history (DTA dialogue, brainstorming, casual chat). Presents 2-4 draft variations via AskUserQuestion, then asks whether to save to Articles/, post to gobi space, or both. Default mode requires approval; pass `bypass` to auto-pick the highest-confidence draft and apply Recommended destinations.
 disable-model-invocation: true
 ---
 
@@ -11,7 +11,7 @@ disable-model-invocation: true
 ## Args
 
 - (default) `approval` — interactive: 초안 선택 → 게재 선택 → 실행
-- `bypass` — 자동: 가장 자신감 높은 초안 선택 + 권장 게재처(로컬 저장 + BU + 스레드) 자동 실행
+- `bypass` — 자동: 가장 자신감 높은 초안 선택 + 권장 게재처(로컬 저장 + 스페이스 게시) 자동 실행
 
 ## Flow
 
@@ -31,9 +31,9 @@ disable-model-invocation: true
 **2–4개 초안 변형**을 만든다. 각 초안은 다른 앵글:
 
 - **A. Reflection (긴 글)** — 에세이 스타일, 사고 흐름 포함, 1인칭 산문. ~400-600 words. Articles에 적합.
-- **B. Insight (BU 스타일)** — 핵심 인사이트 + 보조 포인트 2-3개 + 질문/캡션 한 줄. ~150-250 words.
+- **B. Insight (짧은 글)** — 핵심 인사이트 + 보조 포인트 2-3개 + 질문/캡션 한 줄. ~150-250 words.
 - **C. Story (스토리)** — 일화 → 깨달음 구조. ~200-300 words. 경험담이 있을 때만.
-- **D. Hot take (짧은 스레드)** — 도발적 한 줄 + 정당화 2-3문장. ~50-100 words.
+- **D. Hot take (도발적 한 줄)** — 도발적 한 줄 + 정당화 2-3문장. ~50-100 words.
 
 대화에 맞지 않는 변형은 건너뛴다 (서사가 없으면 Story 빼기, 짧은 주제면 Reflection 빼기 등). 최소 2개는 만들어 비교 가능하게 한다.
 
@@ -48,7 +48,7 @@ options:
   - label: "A. Reflection (긴 글)"
     description: "에세이 스타일, 사고 과정 포함, ~500 words"
     preview: <full draft A>
-  - label: "B. Insight (BU 스타일)"
+  - label: "B. Insight (짧은 글)"
     description: "핵심 인사이트 + 보조, ~200 words"
     preview: <full draft B>
   - ...
@@ -69,9 +69,9 @@ options:
   - label: "로컬 저장만 (Articles/)"
     description: "Articles/YYYY-MM-DD <제목>.md 로 저장. 게재 없음."
   - label: "gobi space에만 게재"
-    description: "BU + 스레드 게시. 로컬 저장 안 함."
+    description: "스페이스에 게시. 로컬 저장 안 함."
   - label: "둘 다 (Recommended)"
-    description: "로컬 저장 + BU + 스레드 게시"
+    description: "로컬 저장 + 스페이스 게시"
 ```
 
 **bypass 모드**: "둘 다"를 기본으로.
@@ -85,20 +85,15 @@ options:
   - 후보 있음: AskUserQuestion으로 "기존 글 [[파일]]에 이어 쓸까요, 새 글로 만들까요?" (approval 모드)
   - 후보 없음 또는 bypass: `Articles/YYYY-MM-DD <한 줄 제목>.md` 새로 생성
   - frontmatter: `title`, `created` (YYYY-MM-DD HH:MM:SS), `tags`, `source_dialogue: writeup` (DTA에서 넘어왔으면 `source_dialogue: DTA→writeup`)
-- **BU 게재**:
-  - `gobi brain post-update --title "<제목>" --content "<초안 본문>"`
-  - 본문이 600자 초과 시 핵심 문단만 발췌 + 끝에 "전체 글: [[Articles/...]]" 링크 (로컬 저장 함께 한 경우)
-- **스레드 게재**:
-  - `gobi space create-thread` 로 게시
-  - 280자 캡, 초과 시 hot take 스타일로 자동 압축
+- **스페이스 게재**:
+  - `gobi space create-post` 로 게시
 
 ### 6. REPORT
 
 실행 결과를 명확히 알린다:
 
 - 로컬: "저장했어요: [[Articles/...]]"
-- BU: "BU 게시 완료: <URL>"
-- Thread: "스페이스 스레드 게시 완료: <URL>"
+- Post: "스페이스 게시 완료: <URL>"
 - 부분 실패: 성공 항목과 실패 항목 분리해서 보고 + 실패 항목 재시도 방법 안내
 
 ## Caveats
@@ -129,4 +124,4 @@ options:
 
 ### 게재 실패 시
 - 로컬 저장은 항상 우선 시도. 게재가 실패해도 글은 남는다.
-- 게재 실패 시 사용자에게 "글은 로컬에 잘 저장됐어요. 나중에 'BU 올려줘' 라고 하시면 다시 시도할게요." 안내.
+- 게재 실패 시 사용자에게 "글은 로컬에 잘 저장됐어요. 나중에 '다시 게재해줘' 라고 하시면 다시 시도할게요." 안내.

@@ -1,4 +1,5 @@
 orchestratorEnabled: true
+canvasAutoExportEnabled: false
 voiceSettings:
   primaryLanguage: ko
   secondaryLanguage: en

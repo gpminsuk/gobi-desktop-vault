@@ -24,15 +24,13 @@ NEVER proactively create documentation or README files.
 
 ## Prompts & Workflows
 - Orchestrator config in `orchestrator.yaml` (root) — defines I/O routing, schedules, triggers
-- Prompts can be found in `_Settings_/Prompts`
+- Prompts can be found in `.gobi/prompts/`
   - Naming: `Full Title (ABC).md` (3-letter abbreviation in parentheses)
-  - Frontmatter: `title / abbreviation / category / created` — see `_Settings_/Templates/Prompt Template.md`
+  - Frontmatter: `title / abbreviation / category / created`
   - I/O paths live in `orchestrator.yaml`, NOT in the prompt frontmatter
-- Agent system prompts in `_Settings_/Agents` (e.g. Deep Thinking Assistant)
+- Agent system prompts in `.gobi/agents/` (e.g. Deep Thinking Assistant)
 - Skills can be found in `.claude/skills`
-- Templates (of md docs) in `_Settings_/Templates`
-- Knowledge Tasks in `_Settings_/Tasks` (only when requested)
-- Cross-cutting know-how (cookbooks, trial-and-error logs) in `_Settings_/Notes/` — read BEFORE related work, append AFTER discoveries
+- Knowledge Tasks in `.gobi/tasks/` (only when requested)
 - Each command can be called using abbreviations
 - Check this first for new command (especially if it's abbreviations)
 
@@ -47,7 +45,7 @@ NEVER proactively create documentation or README files.
 - To use a skill, read the corresponding `SKILL.md` file first
 - Available project skills:
   - `gobi-onboarding` - Gobi Desktop voice onboarding flow
-  - `create-gobi-homepage` - generate a Brain homepage (home.html) from 4 style templates via an interactive interview (legacy `/CBH` still resolves)
+  - `create-gobi-homepage` - generate a Brain homepage (home.html) from 4 style templates via an interactive interview
 - Project slash commands live in `.claude/commands/` (invoked as `/<name>` in chat — single-file, not the folder/SKILL.md structure):
   - `writeup` (`/writeup [approval|bypass]`) - drafts 2-4 writeup options from the current conversation, presents via AskUserQuestion, then saves to `Articles/` and/or posts to gobi space. `bypass` auto-picks highest-confidence draft and applies Recommended destinations.
 - Gobi CLI is exposed as user-invocable harness skills (no local folder needed):

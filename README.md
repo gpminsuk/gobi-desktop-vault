@@ -9,12 +9,10 @@ gobi-desktop-vault/
 ├── .claude/
 │   └── skills/              # Claude Code skills
 ├── .gobi/
-│   └── settings.yaml        # Gobi runtime settings (language, mic, LLM provider)
-├── _Settings_/              # Vault configuration and system files
-│   ├── Agents/              # Agent system prompts (e.g. DTA)
-│   ├── Prompts/             # Workflow/batch agent prompts
-│   ├── Templates/           # Markdown templates
-│   └── Logs/                # Execution logs
+│   ├── settings.yaml        # Gobi runtime settings (language, mic, LLM provider)
+│   ├── agents/              # Agent system prompts (e.g. DTA, CEA)
+│   ├── prompts/             # Workflow/batch agent prompts (e.g. DRB)
+│   └── logs/                # Execution logs
 ├── Ingest/                  # Raw data from outside sources
 │   ├── Clippings/           # Web clippings, transcripts, captures
 │   └── Research/            # Research briefings, reference material
