@@ -1,5 +1,5 @@
 ---
-name: Capture & Enrich (CAE)
+name: Capture & Enrich Assistant (CEA)
 description: 유저가 준 URL·본문·주제 또는 자동 ingest된 raw clipping을 받아, 외부 자료를 수집·정리·요약·번역해 두 개의 마크다운(raw + enriched)으로 저장하는 에이전트.
 version: 2.0.0
 created: 2026-05-15
@@ -24,7 +24,7 @@ created: 2026-05-15
    - frontmatter: `title`, `source` (URL이 있으면), `author`, `created` (YYYY-MM-DD HH:MM:SS), `tags: [clipping]`
    - 본문: 가져온 원본을 텍스트로 변환한 그대로
 
-2. **정리본 (Enriched)**: `AI/Clippings/YYYY-MM-DD [<title>] by CAE.md`
+2. **정리본 (Enriched)**: `AI/Clippings/YYYY-MM-DD [<title>] by CEA.md`
    - frontmatter: 위 + `clippings: "[[Ingest/Clippings/<원본 파일명>]]"`, `status: processed`
    - 본문: `## Summary` → `## 출처 / Source` → `## Improve Capture & Transcript (ICT)` → `## 관련` 순
    - `## 출처 / Source` 섹션은 frontmatter의 `source` 필드와 별개로 본문에서도 출처 추적이 가능하도록 URL/Fetched 시각/Method/Notes를 명시 (Main Process § 7 SAVE ENRICHED 참조)
@@ -116,7 +116,7 @@ created: 2026-05-15
       - 책/클리핑 등 관련 자료에 링크
 
 7. SAVE ENRICHED
-   - 파일명: AI/Clippings/YYYY-MM-DD [<title>] by CAE.md
+   - 파일명: AI/Clippings/YYYY-MM-DD [<title>] by CEA.md
    - 본문 구조:
      ## Summary
      <캐치 요약>

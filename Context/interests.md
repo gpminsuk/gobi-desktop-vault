@@ -1,6 +1,6 @@
 ---
 title: User Interests
-description: 유저의 관심사 리스트. 온보딩에서 초기 수집되고, 리서치(DRB, CAE TOPIC 모드, DTA seed 선택)에서 읽힌다. 에이전트가 read/write/update 가능한 살아있는 문서.
+description: 유저의 관심사 리스트. 온보딩에서 초기 수집되고, 리서치(DRB, CEA TOPIC 모드, DTA seed 선택)에서 읽힌다. 에이전트가 read/write/update 가능한 살아있는 문서.
 created: 2026-05-15 23:05:00
 tags:
   - context
@@ -50,7 +50,7 @@ tags:
 
 ### 읽기 (READ)
 - **DRB**: Step 1에서 `Articles/` 최근 수정 파일과 함께 본 파일의 "주요 관심 분야"와 "현재 학습 중"을 시드 토픽으로 사용
-- **CAE (TOPIC mode)**: 유저가 모호한 주제만 줬을 때 (예: "AI") 본 파일에서 더 구체적인 키워드 보강
+- **CEA (TOPIC mode)**: 유저가 모호한 주제만 줬을 때 (예: "AI") 본 파일에서 더 구체적인 키워드 보강
 - **DTA (SETUP)**: 시드가 없을 때 seed 후보를 본 파일의 "주요 관심 분야"에서 추출
 - **gobi-onboarding (2-1)**: 시드 글 자동 생성 시 본 파일의 관심사 반영
 

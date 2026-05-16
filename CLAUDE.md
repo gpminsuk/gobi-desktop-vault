@@ -70,14 +70,14 @@ Ingest/         → Articles/
 ```
 
 - **`Ingest/`** — raw data collected from outside sources
-  - `Ingest/Clippings/` — web clippings, transcripts, captures (CAE enriches these)
+  - `Ingest/Clippings/` — web clippings, transcripts, captures (CEA enriches these)
   - `Ingest/Research/` — research briefings and reference material (DRB writes here)
   - `Ingest/Chats/` — chat session history (orchestrator `chat_history_dir`)
   - `Ingest/Captures/` — ambient canvas / voice captures (orchestrator `captures_dir`)
 - **`Articles/`** — user-authored content where the user infuses their own thinking with ingested data. Authored by the user, often through dialogue with a deep-thinking agent.
 - **`Context/`** — user-context reference data: events (conferences, meetups, talks), interests, preferences, profile-adjacent metadata. Read/written by onboarding, research, and conversational agents.
-  - `Context/interests.md` — user's interest list (consulted by DRB, CAE TOPIC mode, DTA seed selection; written/updated by onboarding)
-  - `Context/preferences.md` — user's output/style/cadence/source preferences (consulted by DRB for briefing params, CAE for output formatting + source filtering, DTA for dialogue length and response style; written by onboarding + explicit user "다음부터는 ~" requests)
+  - `Context/interests.md` — user's interest list (consulted by DRB, CEA TOPIC mode, DTA seed selection; written/updated by onboarding)
+  - `Context/preferences.md` — user's output/style/cadence/source preferences (consulted by DRB for briefing params, CEA for output formatting + source filtering, DTA for dialogue length and response style; written by onboarding + explicit user "다음부터는 ~" requests)
   - `Context/YYYY-MM-DD Event Name/` — one folder per event with `event.md` + flat session files (no `Sessions/` subfolder)
 - **`AI/`** — agent workspace for machine-generated intermediate outputs (gitignored, not part of the user-visible flow).
 
@@ -220,7 +220,7 @@ When you need user input on a decision with **2-4 discrete options** that meanin
 - **If unsure about section**: Link to file only `[[Limitless/YYYY-MM-DD]]`
 
 ### Heading Structure Guidelines
-- Clippings (CAE/ICT): begin with `## Summary`, then `## Improve Capture & Transcript (ICT)`, then transcript
+- Clippings (CEA/ICT): begin with `## Summary`, then `## Improve Capture & Transcript (ICT)`, then transcript
 - ICT means improve the transcript (correct grammar, translate to Korean, structure with h3), not summarize. Keep length comparable to source; summaries live only under `## Summary`
 - Lifelog: use H1 `# YYYY-MM-DD Lifelog - <Assistant>` then H2 sections (Monologues, Conversations, etc.)
 - Articles: start with H2 summary; avoid duplicating title as H1
