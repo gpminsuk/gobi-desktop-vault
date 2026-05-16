@@ -17,8 +17,10 @@ Generate a daily briefing on topics you're actively researching, based on your r
 
 ## Input
 
-- `Articles/` folder (auto-detect recently modified files)
-- Maximum 5 topics per run
+- `Articles/` folder (auto-detect recently modified files) — recency signal
+- `Context/interest.md` — user's stable interest list ("주요 관심 분야", "현재 학습 중", "관심 해제")
+- `Context/preference.md` — runtime overrides for max_topics, search depth, source filters, language/tone, summary length
+- Maximum N topics per run (N = preference.md `DRB 토픽 수`, default 5)
 
 ## Output
 
@@ -45,19 +47,29 @@ Before running, read `Context/preference.md` for runtime overrides. The file may
 
 ### Step 1: Identify Active Topics
 
-Scan `Articles/` folder for recently modified files (last 7 days):
+Merge **two signals** to produce the topic candidate list:
 
+**Signal A — Recency (Articles/)**:
 ```bash
-# Find recently modified articles
+# Find recently modified articles (lookback_days from preference.md, default 7)
 find Articles/ -name "*.md" -mtime -7 | sort -t/ -k2
 ```
 
-Also consult `Context/interest.md` — pull from "주요 관심 분야" and "현재 학습 중" sections. These are the user's stable interests, complementing the recency signal from Articles/.
+**Signal B — Stable interests (`Context/interest.md`)**:
+- Read the file and extract entries from:
+  - "주요 관심 분야" → high-priority candidates
+  - "현재 학습 중" → high-priority candidates (the user is actively learning these — fresh updates matter)
+  - "부수 관심 분야" → lower-priority candidates, only included if Signal A is thin
+- **Exclude** entries from "관심 해제" — the user explicitly opted out of these.
 
-**Selection criteria:**
-1. Sort by modification date (most recent first)
-2. Select up to 5 topics
-3. Extract topic name and key interests from each file
+**Merge & dedupe**:
+1. Pool candidates from both signals
+2. Deduplicate by topic name (case-insensitive, fuzzy match — e.g. "LLM evaluation" and "LLM Eval" merge)
+3. Sort: items appearing in BOTH signals first (highest signal), then Signal B "주요"/"현재 학습 중", then Signal A by recency, then Signal B "부수"
+4. Cap at `max_topics` (from preference.md, default 5)
+5. For each selected topic, extract topic name + key subtopics (from Articles H2/H3 if present, otherwise infer from interest.md context)
+
+This ensures DRB covers what you've actively been writing AND what you stably care about, even if you haven't written about it recently.
 
 ### Step 2: Extract Search Keywords
 

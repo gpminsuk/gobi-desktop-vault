@@ -17,7 +17,7 @@ metadata:
 - "onboarding" / "시작 도우미"
 
 ### 참고
-- 음성 출력 규칙은 RVA 시스템 프롬프트에서 이미 적용되므로, 이 스킬에서는 온보딩 플로우만 담당한다.
+- 음성 출력 규칙은 CLAUDE.md § Voice Output Standards를 따른다. 이 스킬에서는 온보딩 플로우만 담당한다.
 
 ### 언어 설정
 1. **`.gobi/settings.yaml`의 `primaryLanguage`를 확인한다.**

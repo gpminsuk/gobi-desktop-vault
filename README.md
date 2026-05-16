@@ -11,7 +11,7 @@ gobi-desktop-vault/
 ├── .gobi/
 │   └── settings.yaml        # Gobi runtime settings (language, mic, LLM provider)
 ├── _Settings_/              # Vault configuration and system files
-│   ├── Agents/              # Agent system prompts (e.g. RVA)
+│   ├── Agents/              # Agent system prompts (e.g. DTA)
 │   ├── Prompts/             # Workflow/batch agent prompts
 │   ├── Templates/           # Markdown templates
 │   └── Logs/                # Execution logs

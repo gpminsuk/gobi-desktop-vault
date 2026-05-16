@@ -28,7 +28,7 @@ NEVER proactively create documentation or README files.
   - Naming: `Full Title (ABC).md` (3-letter abbreviation in parentheses)
   - Frontmatter: `title / abbreviation / category / created` — see `_Settings_/Templates/Prompt Template.md`
   - I/O paths live in `orchestrator.yaml`, NOT in the prompt frontmatter
-- Agent system prompts in `_Settings_/Agents` (e.g. Real-time Voice Assistant)
+- Agent system prompts in `_Settings_/Agents` (e.g. Deep Thinking Assistant)
 - Skills can be found in `.claude/skills`
 - Templates (of md docs) in `_Settings_/Templates`
 - Knowledge Tasks in `_Settings_/Tasks` (only when requested)
@@ -48,7 +48,8 @@ NEVER proactively create documentation or README files.
 - Available project skills:
   - `gobi-onboarding` - Gobi Desktop voice onboarding flow
   - `create-gobi-homepage` - generate a Brain homepage (home.html) from 4 style templates via an interactive interview (legacy `/CBH` still resolves)
-  - `writeup` - drafts 2-3 writeup options from the current conversation, presents via AskUserQuestion, then saves to `Articles/` and/or posts to gobi space (`/writeup` for approval mode, `/writeup bypass` for Recommended-defaults auto-run)
+- Project slash commands live in `.claude/commands/` (invoked as `/<name>` in chat — single-file, not the folder/SKILL.md structure):
+  - `writeup` (`/writeup [approval|bypass]`) - drafts 2-4 writeup options from the current conversation, presents via AskUserQuestion, then saves to `Articles/` and/or posts to gobi space. `bypass` auto-picks highest-confidence draft and applies Recommended destinations.
 - Gobi CLI is exposed as user-invocable harness skills (no local folder needed):
   - `gobi:gobi-core` - auth, vault init, space warp, CLI updates, session management
   - `gobi:gobi-space` - posts and replies in community space (`gobi space`) and global feed (`gobi global`)
@@ -76,7 +77,7 @@ Ingest/         → Articles/
 - **`Articles/`** — user-authored content where the user infuses their own thinking with ingested data. Authored by the user, often through dialogue with a deep-thinking agent.
 - **`Context/`** — user-context reference data: events (conferences, meetups, talks), interests, preferences, profile-adjacent metadata. Read/written by onboarding, research, and conversational agents.
   - `Context/interest.md` — user's interest list (consulted by DRB, CAE TOPIC mode, DTA seed selection; written/updated by onboarding)
-  - `Context/preference.md` — user's output/style/cadence/source preferences (consulted by DRB for briefing params, CAE for output formatting + source filtering, DTA for dialogue length, RVA for response style; written by onboarding + explicit user "다음부터는 ~" requests)
+  - `Context/preference.md` — user's output/style/cadence/source preferences (consulted by DRB for briefing params, CAE for output formatting + source filtering, DTA for dialogue length and response style; written by onboarding + explicit user "다음부터는 ~" requests)
   - `Context/YYYY-MM-DD Event Name/` — one folder per event with `event.md` + flat session files (no `Sessions/` subfolder)
 - **`AI/`** — agent workspace for machine-generated intermediate outputs (gitignored, not part of the user-visible flow).
 
@@ -162,13 +163,28 @@ tags:
 - Use the `primaryLanguage` from `.gobi/settings.yaml` as the default language for all output (English is fine, say, to quote original note)
 - For voice/conversation: match the user's spoken language; fall back to `primaryLanguage` if ambiguous
 
+### Voice Output Standards (음성 출력)
+
+When the agent is speaking to the user (voice channel, TTS, or any conversational mode), follow these rules so output sounds natural:
+
+1. **괄호 안 내용 생략**: `(예시)`, `(YYYY-MM-DD)` 등 괄호 안은 읽지 않음
+2. **구어체 숫자**: "3권" → "세 권", "2-3문장" → "두세 문장"
+3. **경로 읽기**: 파일 경로는 자연스럽게 발음 — `Journal/YYYY-MM-DD.md` → "저널 슬래시 연월일 엠디"
+4. **약어 풀어 읽기**: "AI" → "에이아이", "PKM" → "피케이엠"
+
+**적용 예시**:
+- ❌ "오늘 저널 괄호 Journal slash YYYY dash MM dash DD dot md 괄호"
+- ✅ "오늘 저널"
+- ❌ "1에서 3문장으로 답변합니다"
+- ✅ "한두 문장에서 세 문장 정도로 답변할게요"
+
 ### User Clarification — Structured Choice over Open Questions
 
 When you need user input on a decision with **2-4 discrete options** that meaningfully change your next action, present them as a **structured choice**, not an open question. Reduces back-and-forth, surfaces options the user might not know exist, and produces a cleaner decision trail.
 
 **Tool / rendering by environment**:
 - **Claude Code / chat**: use the `AskUserQuestion` tool — renders as clickable options with descriptions. Mark the best pick with `(Recommended)` and put it first.
-- **Voice (RVA, DTA via voice)**: verbalize as numbered or labeled options.
+- **Voice (DTA or any voice mode)**: verbalize as numbered or labeled options.
   > "두 가지 방법이 있어요. 첫째, 새 글로 쓰기. 둘째, 기존 글에 이어 붙이기. 어느 쪽이 끌리세요?"
 
 **When to use**:
