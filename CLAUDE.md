@@ -48,6 +48,7 @@ NEVER proactively create documentation or README files.
 - Available project skills:
   - `gobi-onboarding` - Gobi Desktop voice onboarding flow
   - `create-gobi-homepage` - generate a Brain homepage (home.html) from 4 style templates via an interactive interview (legacy `/CBH` still resolves)
+  - `writeup` - drafts 2-3 writeup options from the current conversation, presents via AskUserQuestion, then saves to `Articles/` and/or posts to gobi space (`/writeup` for approval mode, `/writeup bypass` for Recommended-defaults auto-run)
 - Gobi CLI is exposed as user-invocable harness skills (no local folder needed):
   - `gobi:gobi-core` - auth, vault init, space warp, CLI updates, session management
   - `gobi:gobi-space` - posts and replies in community space (`gobi space`) and global feed (`gobi global`)
